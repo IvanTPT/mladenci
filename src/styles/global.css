@@ -1,7 +1,134 @@
-/* src/styles/global.css */
 @import "@fontsource-variable/inter/index.css";
 @import "@fontsource/playfair-display/latin.css";
-@import "@fontsource/marck-script"; 
+@import "@fontsource/marck-script";
 @import "tailwindcss";
 
-/* ... остатак твог CSS-а ... */
+@theme {
+    --font-sans:
+        "Inter Variable", "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    --font-serif: "Playfair Display", serif;
+    --font-display: "Marck Script", cursive;
+    --section-padding: clamp(2rem, 7vw, 6rem);
+    --section-max-width: 1200px;
+    --shadow-card: 0 12px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* Палета боја прилагођена венчању */
+:root {
+    color-scheme: light;
+    background-color: var(--color-background);
+
+    /* Main боје из твог дизајна */
+    --color-primary: #434a42; /* Маслинасто зелена */
+    --color-secondary: #d4dfc7; /* Светло зелена / пастелна */
+    --color-accent: #772e25; /* Топла акцентна боја */
+    --color-background: #d6ccc2; /* Топла беж позадина */
+    --color-text-dark: #111111;
+    --color-text-light: #d6ccc2;
+}
+
+@layer base {
+    *,
+    *::before,
+    *::after {
+        @apply antialiased;
+    }
+
+    body {
+        font-family: var(--font-sans);
+        background-color: var(--color-background);
+        color: var(--color-text-dark);
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-display);
+        font-weight: 400;
+    }
+}
+
+@layer components {
+    .section {
+        min-height: 100vh;
+        padding: var(--section-padding);
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    /* Алтернативна позадина за наизменичне секције */
+    .section.alt-bg {
+        background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.25),
+            rgba(0, 0, 0, 0)
+        );
+    }
+
+    /* Анимација приликом скроловања */
+    .section__inner {
+        width: 100%;
+        max-width: var(--section-max-width);
+        margin: 0 auto;
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+            opacity 0.8s cubic-bezier(0.2, 0.9, 0.2, 1),
+            transform 0.8s cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    /* Када JS детектује секцију на екрану, додаје ову класу */
+    .section.is-visible .section__inner {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .section__title {
+        margin: 0 0 2rem 0;
+        font-size: clamp(2.5rem, 4vw + 1rem, 4.5rem);
+        text-align: center;
+        color: var(--color-primary);
+    }
+
+    .section__content {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Изглед картица (RSVP, Слике, Временска линија) */
+    .card {
+        background-color: color-mix(in srgb, var(--color-background), white 40%);
+        border: 1px solid color-mix(in srgb, var(--color-accent), transparent 60%);
+        box-shadow: var(--shadow-card);
+        backdrop-filter: blur(8px);
+        transition:
+            box-shadow 0.3s ease,
+            transform 0.3s ease,
+            border-color 0.3s ease;
+    }
+
+    .card:is(:hover, :focus-within) {
+        transform: translateY(-4px);
+        box-shadow: 0 32px 70px color-mix(in srgb, var(--color-primary), transparent 80%);
+        border-color: color-mix(in srgb, var(--color-accent), transparent 30%);
+    }
+
+    .card__title {
+        color: var(--color-primary);
+    }
+
+    .card__subtitle {
+        color: var(--color-accent);
+        letter-spacing: 0.1em;
+    }
+}
