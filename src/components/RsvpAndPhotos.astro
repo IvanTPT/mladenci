@@ -4,46 +4,100 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
 ---
 
 <section class="section alt-bg">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4">
-    
-    <!-- Лева страна: RSVP -->
-    <div class="card p-8 rounded-xl shadow-lg bg-white">
-  <h2 id="form-title">Потврда доласка</h2>
-  
-  <form id="rsvp-form" class="rsvp-form">
-    <fieldset>
-      <legend>Ваши подаци</legend>
-      <div class="input-group">
-        <label for="firstName">Име</label>
-        <input type="text" id="firstName" name="firstName" required placeholder="Унесите ваше име" />
+  <div class="section__inner w-full max-w-6xl mx-auto px-4">
+    <h2 class="section__title">Присуство и Успомене</h2>
+
+    <!-- GRID: items-stretch осигурава да обе колоне буду исте висине -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mt-8">
+      
+      <!-- ЛЕВА СТРАНА: RSVP -->
+      <!-- Додато h-full и flex-col да би се картица растегла до дна -->
+      <div class="card rsvp-container h-full flex flex-col p-8 rounded-xl shadow-lg bg-white">
+        <h2 id="form-title">Потврда доласка</h2>
+        
+        <form id="rsvp-form" class="rsvp-form flex-1">
+          <fieldset>
+            <legend>Ваши подаци</legend>
+            <div class="input-group">
+              <label for="firstName">Име</label>
+              <input type="text" id="firstName" name="firstName" required placeholder="Унесите ваше име" />
+            </div>
+            <div class="input-group">
+              <label for="lastName">Презиме</label>
+              <input type="text" id="lastName" name="lastName" required placeholder="Унесите ваше презиме" />
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Особе које долазе са вама</legend>
+            <div id="guests-container"></div>
+            <button type="button" id="add-guest-btn" class="secondary-btn">
+              + Додај особу
+            </button>
+          </fieldset>
+
+          <!-- Дугме је гурнуто на дно уз помоћ mt-auto ако затреба -->
+          <button type="submit" id="submit-btn" class="primary-btn mt-auto">Потврди долазак</button>
+        </form>
+
+        <div id="success-message" class="success-message h-full flex flex-col justify-center items-center" style="display: none;">
+          <svg xmlns="http://www.w3.org/2000/svg" class="success-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <h3 class="text-xl">Хвала Вам што сте потврдили свој долазак, радујемо се скором виђењу.</h3>
+        </div>
       </div>
-      <div class="input-group">
-        <label for="lastName">Презиме</label>
-        <input type="text" id="lastName" name="lastName" required placeholder="Унесите ваше презиме" />
+
+      <!-- ДЕСНА СТРАНА: Фотографије -->
+      <!-- Додато h-full да прати висину леве стране -->
+      <div class="card p-8 rounded-xl shadow-lg bg-white text-center h-full flex flex-col justify-center items-center">
+        <h2 class="text-3xl mb-6 font-display">Поделите успомене</h2>
+        
+        <!-- Контејнери које JS контролише -->
+        <div id="photo-message-container">
+          <p class="text-lg text-gray-600 mb-4">{data.poruka_pre_vremena}</p>
+          <div class="opacity-50 blur-sm pointer-events-none">
+            <img src={qrCodeUrl} alt="Замагљен QR код" class="mx-auto border p-2 rounded" />
+          </div>
+        </div>
+
+        <div id="photo-qr-container" style="display: none;">
+          <p class="text-lg text-gray-600 mb-4">Скенирајте QR код и додајте ваше фотографије!</p>
+          <img src={qrCodeUrl} alt="QR код за албум" class="mx-auto border-2 border-accent p-2 rounded-xl hover:scale-105 transition" />
+          <a href={data.album_url} target="_blank" class="mt-4 inline-block text-accent underline hover:text-primary transition">Или кликните овде</a>
+        </div>
       </div>
-    </fieldset>
-
-    <fieldset>
-      <legend>Особе које долазе са вама</legend>
-      <div id="guests-container"></div>
-      <button type="button" id="add-guest-btn" class="secondary-btn">
-        + Додај особу
-      </button>
-    </fieldset>
-
-    <button type="submit" id="submit-btn" class="primary-btn">Потврди долазак</button>
-  </form>
-
-  <div id="success-message" class="success-message" style="display: none;">
-    <svg xmlns="http://www.w3.org/2000/svg" class="success-icon" viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-    </svg>
-    <h3>Хвала Вам што сте потврдили свој долазак, радујемо се скором виђењу.</h3>
+      
+    </div>
   </div>
-</div>
+</section>
+
+<!-- Прослеђујемо датум венчања у JS преко дата атрибута -->
+<div id="wedding-date-data" data-date={datumVencanja} style="display: none;"></div>
 
 <script>
-  // ... (Овај део скрипте остаје ПОТПУНО ИСТИ као у претходном одговору) ...
+  // ==========================================
+  // 1. ЛОГИКА ЗА ФОТОГРАФИЈЕ (ПРИКАЗ QR КОДА)
+  // ==========================================
+  const targetDateStr = document.getElementById('wedding-date-data')?.dataset.date;
+  if(targetDateStr) {
+    const targetDate = new Date(targetDateStr).getTime();
+    const now = new Date().getTime();
+
+    if(now >= targetDate) {
+      const msgContainer = document.getElementById('photo-message-container');
+      const qrContainer = document.getElementById('photo-qr-container');
+      
+      if(msgContainer && qrContainer) {
+        msgContainer.style.display = 'none';
+        qrContainer.style.display = 'block';
+      }
+    }
+  }
+
+  // ==========================================
+  // 2. ЛОГИКА ЗА RSVP ФОРМУ
+  // ==========================================
   const addGuestBtn = document.getElementById('add-guest-btn');
   const guestsContainer = document.getElementById('guests-container');
   const rsvpForm = document.getElementById('rsvp-form');
@@ -79,29 +133,45 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
     e.preventDefault();
     if(submitBtn) submitBtn.textContent = 'Шаљем...';
     
-    // ОВДЕ ТИ ИДЕ ТВOЈ GOOGLE SCRIPT ЛИНК
+    // Твој Google Script URL
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8izZ0PWNXTl0RREHobK6P3b6NdixRGAnj9dpaTmzQfMtKSY6oZH8AIRiTDKhxemAG/exec'; 
-    // Овде иде логика за скупљање података и fetch као из претходног кода...
-    // Да би било краће у одговору нисам копирао све, али ту логику не дираш!
     
-    setTimeout(() => {
+    const formData = new FormData(rsvpForm as HTMLFormElement);
+    const guestFirstNames = formData.getAll('guestFirstName[]');
+    const guestLastNames = formData.getAll('guestLastName[]');
+
+    let pratioci = [];
+    for (let i = 0; i < guestFirstNames.length; i++) {
+      pratioci.push(`${guestFirstNames[i]} ${guestLastNames[i]}`);
+    }
+
+    const data = {
+      ime: formData.get('firstName'),
+      prezime: formData.get('lastName'),
+      pratioci: pratioci.join(', ')
+    };
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data)
+      });
+
+      // Приказ поруке о успеху
       rsvpForm.style.display = 'none';
       if(formTitle) formTitle.style.display = 'none';
       if(successMessage) successMessage.style.display = 'flex';
-    }, 1000);
+    } catch (error) {
+      alert('Дошло је до грешке приликом слања. Покушајте поново.');
+      if(submitBtn) submitBtn.textContent = 'Потврди долазак';
+    }
   });
 </script>
 
 <style>
-  /* Прилагођено твом глобалном дизајну */
-  .rsvp-container {
-    width: 100%;
-    padding: 2.5rem 2rem;
-    border-radius: 1rem;
-    box-sizing: border-box;
-  }
-
-  h2 {
+  /* Локални стилови за RSVP форму */
+  .rsvp-container h2 {
     text-align: center;
     margin-bottom: 2rem;
     color: var(--color-text-dark);
@@ -146,19 +216,12 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
   }
   .secondary-btn:hover { background-color: color-mix(in srgb, var(--color-secondary), black 10%); }
 
-  .success-message {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 2rem 0;
-  }
   .success-icon { width: 60px; height: 60px; color: var(--color-accent); margin-bottom: 1rem; }
-  .success-message h3 { color: var(--color-primary); }
+  .success-message h3 { color: var(--color-primary); font-family: var(--font-lato); }
 </style>
 
 <style is:global>
-  /* Динамички елементи сада прате твоје боје */
+  /* Глобални стилови за динамички додате госте у RSVP форми */
   .guest-row {
     display: flex; gap: 1rem; align-items: flex-end; margin-bottom: 1rem;
     background: color-mix(in srgb, var(--color-background), white 30%);
@@ -178,47 +241,3 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
   }
   .remove-btn:hover { background-color: var(--color-accent); color: white; }
 </style>
-
-    <!-- Десна страна: Фотографије (са логиком) -->
-    <div class="card p-8 rounded-xl shadow-lg bg-white text-center flex flex-col justify-center items-center">
-      <h2 class="text-3xl mb-6 font-display">Поделите успомене</h2>
-      
-      <!-- Контејнери које JS контролише -->
-      <div id="photo-message-container">
-        <p class="text-lg text-gray-600 mb-4">{data.poruka_pre_vremena}</p>
-        <div class="opacity-50 blur-sm pointer-events-none">
-           <img src={qrCodeUrl} alt="Замагљен QR код" class="mx-auto border p-2 rounded" />
-        </div>
-      </div>
-
-      <div id="photo-qr-container" style="display: none;">
-        <p class="text-lg text-gray-600 mb-4">Скенирајте QR код и додајте ваше фотографије!</p>
-        <img src={qrCodeUrl} alt="QR код за албум" class="mx-auto border-2 border-accent p-2 rounded-xl hover:scale-105 transition" />
-        <a href={data.album_url} target="_blank" class="mt-4 inline-block text-accent underline">Или кликните овде</a>
-      </div>
-    </div>
-    
-  </div>
-</section>
-
-<!-- Прослеђујемо датум венчања у JS преко дата атрибута -->
-<div id="wedding-date-data" data-date={datumVencanja} style="display: none;"></div>
-
-<script>
-  const targetDateStr = document.getElementById('wedding-date-data')?.dataset.date;
-  if(targetDateStr) {
-    const targetDate = new Date(targetDateStr).getTime();
-    const now = new Date().getTime();
-
-    // Ако је тренутно време веће или једнако датуму венчања (почео је дан венчања)
-    if(now >= targetDate) {
-      const msgContainer = document.getElementById('photo-message-container');
-      const qrContainer = document.getElementById('photo-qr-container');
-      
-      if(msgContainer && qrContainer) {
-        msgContainer.style.display = 'none';
-        qrContainer.style.display = 'block';
-      }
-    }
-  }
-</script>
