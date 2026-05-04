@@ -1,0 +1,58 @@
+---
+const { data, datumVencanja } = Astro.props;
+const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data.album_url)}`;
+---
+
+<section class="section alt-bg">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4">
+    
+    <!-- Лева страна: RSVP -->
+    <div class="card p-8 rounded-xl shadow-lg bg-white">
+      <h2 class="text-3xl mb-6 font-display text-center">Потврда доласка</h2>
+      <!-- Овде убацујеш постојећи HTML/JS код за RSVP форму који смо раније направили -->
+      <!-- ... -->
+    </div>
+
+    <!-- Десна страна: Фотографије (са логиком) -->
+    <div class="card p-8 rounded-xl shadow-lg bg-white text-center flex flex-col justify-center items-center">
+      <h2 class="text-3xl mb-6 font-display">Поделите успомене</h2>
+      
+      <!-- Контејнери које JS контролише -->
+      <div id="photo-message-container">
+        <p class="text-lg text-gray-600 mb-4">{data.poruka_pre_vremena}</p>
+        <div class="opacity-50 blur-sm pointer-events-none">
+           <img src={qrCodeUrl} alt="Замагљен QR код" class="mx-auto border p-2 rounded" />
+        </div>
+      </div>
+
+      <div id="photo-qr-container" style="display: none;">
+        <p class="text-lg text-gray-600 mb-4">Скенирајте QR код и додајте ваше фотографије!</p>
+        <img src={qrCodeUrl} alt="QR код за албум" class="mx-auto border-2 border-accent p-2 rounded-xl hover:scale-105 transition" />
+        <a href={data.album_url} target="_blank" class="mt-4 inline-block text-accent underline">Или кликните овде</a>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<!-- Прослеђујемо датум венчања у JS преко дата атрибута -->
+<div id="wedding-date-data" data-date={datumVencanja} style="display: none;"></div>
+
+<script>
+  const targetDateStr = document.getElementById('wedding-date-data')?.dataset.date;
+  if(targetDateStr) {
+    const targetDate = new Date(targetDateStr).getTime();
+    const now = new Date().getTime();
+
+    // Ако је тренутно време веће или једнако датуму венчања (почео је дан венчања)
+    if(now >= targetDate) {
+      const msgContainer = document.getElementById('photo-message-container');
+      const qrContainer = document.getElementById('photo-qr-container');
+      
+      if(msgContainer && qrContainer) {
+        msgContainer.style.display = 'none';
+        qrContainer.style.display = 'block';
+      }
+    }
+  }
+</script>
