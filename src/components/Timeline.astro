@@ -220,3 +220,15 @@ const { data } = Astro.props;
     }
   }
 </style>
+<script>
+  const timelineRows = document.querySelectorAll('.timeline-row');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+      }
+    });
+  }, { threshold: 0.2 }); // Активира се када се види бар 20% блока
+
+  timelineRows.forEach(row => observer.observe(row));
+</script>
