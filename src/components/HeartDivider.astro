@@ -1,0 +1,57 @@
+---
+---
+<div class="heart-divider-wrapper">
+  <svg class="drawing-heart" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- Путања која исцртава савршено срце -->
+    <path class="heart-path" 
+          d="M50 85 C50 85 15 55 15 30 C15 15 30 10 40 20 C50 30 50 35 50 35 C50 35 50 30 60 20 C70 10 85 15 85 30 C85 55 50 85 50 85 Z" 
+          fill="none" 
+          stroke="var(--color-accent)" 
+          stroke-width="2.5" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+  </svg>
+</div>
+
+<script>
+  // Покреће анимацију цртања тек када срце уђе у екран
+  const hearts = document.querySelectorAll('.drawing-heart');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-drawn');
+      }
+    });
+  }, { threshold: 0.5 }); // Активира се када је 50% срца видљиво
+
+  hearts.forEach(heart => observer.observe(heart));
+</script>
+
+<style>
+  .heart-divider-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 0; /* Размак између секција */
+    position: relative;
+    z-index: 10;
+  }
+
+  .drawing-heart {
+    width: 60px;
+    height: 60px;
+    overflow: visible;
+  }
+
+  /* Магија исцртавања (Draw-in ефекат) */
+  .heart-path {
+    stroke-dasharray: 300; /* Дужина линије (оквирно) */
+    stroke-dashoffset: 300; /* Линија је почетно "сакривена" */
+    transition: stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1); /* Глатко цртање од 2 секунде */
+  }
+
+  /* Када IntersectionObserver дода класу 'is-drawn', линија се појављује */
+  .drawing-heart.is-drawn .heart-path {
+    stroke-dashoffset: 0;
+  }
+</style>
