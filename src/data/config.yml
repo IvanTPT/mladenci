@@ -1,10 +1,10 @@
 # src/data/config.yml
 vencanje:
   imena: "Анђела и Миљан"
-  datum_iso: "2026-08-09T14:00:00" # За одбројавање и логику
+  datum_iso: "2026-08-09T14:00:00" 
   datum_prikaz: "09 . 08 . 2026"
-  muzika_url: "/audio/nasa-pesma.mp3" # Стави песму у public/audio/ фасциклу
-  hero_slika: "/images/hero-bg.jpg" # Стави слику у public/images/
+  muzika_url: "/audio/nasa-pesma.mp3" 
+  hero_slika: "/images/hero-bg.jpg" 
 
 plan:
   lokacije:
