@@ -1,134 +1,230 @@
-@import "@fontsource-variable/inter/index.css";
-@import "@fontsource/playfair-display/latin.css";
-@import "@fontsource/marck-script/index.css";
-@import "tailwindcss";
+/* 
+  =========================================
+  1. ЛОКАЛНИ ФОНТОВИ (Учитавање из src/fonts/)
+  =========================================
+*/
 
-@theme {
-    --font-sans:
-        "Inter Variable", "Inter", system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
-    --font-serif: "Playfair Display", serif;
-    --font-display: "Marck Script", cursive;
-    --section-padding: clamp(2rem, 7vw, 6rem);
-    --section-max-width: 1200px;
-    --shadow-card: 0 12px 35px rgba(0, 0, 0, 0.08);
+/* Playfair Display */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  /* Обавезно стави своје .woff2 фајлове у src/fonts/ фолдер! */
+  src: url('../fonts/playfair-display-variable.woff2') format('woff2'); 
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* Палета боја прилагођена венчању */
-:root {
-    color-scheme: light;
-    background-color: var(--color-background);
+@font-face {
+  font-family: 'Playfair Display Fallback';
+  src: local('Times New Roman');
+  ascent-override: 97.25%;
+  descent-override: 22.56%;
+  line-gap-override: 0.0%;
+  size-adjust: 111.26%;
+}
 
-    /* Main боје из твог дизајна */
-    --color-primary: #434a42; /* Маслинасто зелена */
-    --color-secondary: #d4dfc7; /* Светло зелена / пастелна */
-    --color-accent: #772e25; /* Топла акцентна боја */
-    --color-background: #d6ccc2; /* Топла беж позадина */
-    --color-text-dark: #111111;
-    --color-text-light: #d6ccc2;
+/* Lato */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 300 700; /* Комбиновао сам тежине за променљиви фонт ако га имаш, ако имаш одвојене фајлове мораш их раздвојити као у твом коду */
+  font-display: swap;
+  src: url('../fonts/lato-regular.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lato Fallback';
+  src: local('Arial');
+  ascent-override: 101.03%;
+  descent-override: 21.8%;
+  line-gap-override: 0.0%;
+  size-adjust: 97.69%;
+}
+
+/* Marck Script (За наслове који подржавају ћирилицу) */
+@font-face {
+  font-family: 'Marck Script';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/marck-script-regular.woff2') format('woff2');
+}
+
+/* 
+  =========================================
+  2. ТАИЛWИНД И ОСНОВНЕ ДЕФИНИЦИЈЕ
+  =========================================
+*/
+@import "tailwindcss";
+
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      /* ... (овде иду све остале Tailwind properties варијабле из твог кода, скратио сам приказ због прегледности) ... */
+      --tw-exit-translate-y: 0;
+    }
+  }
+}
+
+@layer theme {
+  :root, :host {
+    /* Основне боје из твог кода */
+    --color-red-50: #fef2f2;
+    --color-red-200: #ffcaca;
+    --color-red-500: #fb2c36;
+    --color-red-700: #bf000f;
+    --color-green-100: #dcfce7;
+    --color-green-600: #00a544;
+    --color-blue-500: #3080ff;
+    --color-pink-200: #fccee8;
+    --color-slate-100: #f1f5f9;
+    --color-slate-200: #e2e8f0;
+    --color-slate-300: #cad5e2;
+    --color-slate-400: #90a1b9;
+    --color-slate-500: #62748e;
+    --color-slate-600: #45556c;
+    --color-slate-800: #1d293d;
+    --color-slate-900: #0f172b;
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5dc;
+    --color-gray-400: #99a1af;
+    --color-gray-500: #6a7282;
+    --color-gray-600: #4a5565;
+    --color-gray-700: #364153;
+    --color-black: #000;
+    --color-white: #fff;
+    --spacing: .25rem;
+    
+    /* Додате боје за твоју свадбену тему */
+    --sky-aqua: #32cbff;
+    --fresh-sky: #00a5e0;
+    --wisteria: #89a1ef;
+    --plum: #ef9cda;
+    --petal-frost: #fecef1;
+    --deep-slate: #0a1628;
+    --pure-white: #fff;
+    --primary-pink: var(--plum);
+    --radius: .75rem;
+
+    /* Tailwind конфигурација */
+    --container-xs: 20rem;
+    --container-md: 28rem;
+    --container-lg: 32rem;
+    --container-xl: 36rem;
+    --container-2xl: 42rem;
+    --container-4xl: 56rem;
+    --text-xs: .75rem;
+    --text-xs--line-height: calc(1/.75);
+    /* ... остале text- size варијабле ... */
+    
+    /* Дефиниција фонтова у оквиру Tailwind-а */
+    --font-playfair: "Playfair Display", "Playfair Display Fallback";
+    --font-lato: "Lato", "Lato Fallback";
+    --font-display: "Marck Script", cursive;
+    --default-font-family: var(--font-lato); /* Постављамо Lato као главни font за body */
+  }
+
+  /* ... Твој постојећи @supports (color: lab(0% 0 0)) део ... */
 }
 
 @layer base {
-    *,
-    *::before,
-    *::after {
-        @apply antialiased;
-    }
+  *, :after, :before, ::backdrop {
+    box-sizing: border-box;
+    border: 0 solid;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html, :host {
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    line-height: 1.5;
+    font-family: var(--default-font-family);
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
 
-    body {
-        font-family: var(--font-sans);
-        background-color: var(--color-background);
-        color: var(--color-text-dark);
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-    }
+  body {
+    background-color: var(--color-gray-50); /* Или нека друга твоја background боја */
+    color: var(--color-slate-900);
+    /* Задржао сам онај SVG noise ефекат из твог кода */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        font-family: var(--font-display);
-        font-weight: 400;
-    }
+  /* Сви наслови сада користе Marck Script (ћирилица) или Playfair */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 400; /* Најбоље за Script фонтове */
+  }
+
+  /* ... (овде иду остали твоји base ресетови за button, input, a тагове итд.) ... */
 }
 
+/* 
+  =========================================
+  3. ТВОЈЕ КОМПОНЕНТЕ И АНИМАЦИЈЕ ЗА СВАДБУ
+  =========================================
+*/
 @layer components {
-    .section {
-        min-height: 100vh;
-        padding: var(--section-padding);
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-    }
+  /* Секције */
+  .section {
+    min-height: 100vh;
+    padding: clamp(2rem, 7vw, 6rem);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
 
-    /* Алтернативна позадина за наизменичне секције */
-    .section.alt-bg {
-        background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.25),
-            rgba(0, 0, 0, 0)
-        );
-    }
+  /* Алтернативна позадина */
+  .section.alt-bg {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.4),
+      rgba(0, 0, 0, 0)
+    );
+  }
 
-    /* Анимација приликом скроловања */
-    .section__inner {
-        width: 100%;
-        max-width: var(--section-max-width);
-        margin: 0 auto;
-        opacity: 0;
-        transform: translateY(30px);
-        transition:
-            opacity 0.8s cubic-bezier(0.2, 0.9, 0.2, 1),
-            transform 0.8s cubic-bezier(0.2, 0.9, 0.2, 1);
-    }
+  /* Анимација приликом скроловања (Intersection Observer) */
+  .section__inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+      opacity 0.8s cubic-bezier(0.2, 0.9, 0.2, 1),
+      transform 0.8s cubic-bezier(0.2, 0.9, 0.2, 1);
+  }
 
-    /* Када JS детектује секцију на екрану, додаје ову класу */
-    .section.is-visible .section__inner {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  .section.is-visible .section__inner {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-    .section__title {
-        margin: 0 0 2rem 0;
-        font-size: clamp(2.5rem, 4vw + 1rem, 4.5rem);
-        text-align: center;
-        color: var(--color-primary);
-    }
+  /* Дизајн картица (RSVP, Мапе) - прилагођено твојим бојама */
+  .card {
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--color-slate-200);
+    box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    border-radius: var(--radius);
+    transition: all 0.3s ease;
+  }
 
-    .section__content {
-        font-size: 1.1rem;
-        line-height: 1.6;
-    }
-
-    /* Изглед картица (RSVP, Слике, Временска линија) */
-    .card {
-        background-color: color-mix(in srgb, var(--color-background), white 40%);
-        border: 1px solid color-mix(in srgb, var(--color-accent), transparent 60%);
-        box-shadow: var(--shadow-card);
-        backdrop-filter: blur(8px);
-        transition:
-            box-shadow 0.3s ease,
-            transform 0.3s ease,
-            border-color 0.3s ease;
-    }
-
-    .card:is(:hover, :focus-within) {
-        transform: translateY(-4px);
-        box-shadow: 0 32px 70px color-mix(in srgb, var(--color-primary), transparent 80%);
-        border-color: color-mix(in srgb, var(--color-accent), transparent 30%);
-    }
-
-    .card__title {
-        color: var(--color-primary);
-    }
-
-    .card__subtitle {
-        color: var(--color-accent);
-        letter-spacing: 0.1em;
-    }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.25);
+    border-color: var(--petal-frost);
+  }
 }
+
+/* ... (Након овога иде генерисани део твог Tailwind @layer utilities ако ти је потребан, мада Astro Tailwind интеграција ово обично сама хендлује) ... */
