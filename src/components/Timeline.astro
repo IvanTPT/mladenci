@@ -219,6 +219,36 @@ const { data } = Astro.props;
       font-size: 4.5rem;
     }
   }
+/* === АНИМАЦИЈЕ === */
+  /* Почетно стање: провидна и помакнута у страну зависно од тога где се налази */
+  .left-row .timeline-content {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .right-row .timeline-content {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* Финално стање: видљиво и на свом месту */
+  .timeline-row.is-visible .timeline-content {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Анимација тачке на линији (Попуп ефекат) */
+  .timeline-dot {
+    /* ... твоји постојећи стилови за dot ... */
+    transform: translateX(-50%) scale(0);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s; /* Касни мало са појављивањем */
+  }
+
+  .timeline-row.is-visible .timeline-dot {
+    transform: translateX(-50%) scale(1);
+  }
 </style>
 <script>
   const timelineRows = document.querySelectorAll('.timeline-row');
