@@ -1,0 +1,30 @@
+---
+const { data } = Astro.props;
+---
+<section class="section py-20">
+  <h2 class="text-5xl text-center mb-16 font-display">Наша прича</h2>
+  
+  <div class="relative max-w-4xl mx-auto px-4">
+    <!-- Централна линија -->
+    <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-accent opacity-30"></div>
+    
+    {data.map((item: any, index: number) => (
+      <div class={`mb-12 flex justify-between items-center w-full ${index % 2 === 0 ? 'flex-row-reverse' : ''}`}>
+        <div class="w-5/12"></div>
+        
+        <!-- Кружић на средини -->
+        <div class="z-10 flex items-center justify-center w-12 h-12 bg-white border-4 border-accent rounded-full font-bold text-accent">
+          {item.godina.slice(-2)}'
+        </div>
+        
+        <!-- Садржај -->
+        <div class="w-5/12 card bg-white p-6 rounded-xl shadow-md">
+          <img src={item.slika} alt={item.naslov} class="w-full h-48 object-cover rounded-lg mb-4" />
+          <h3 class="font-bold text-xl mb-2 text-primary">{item.naslov}</h3>
+          <p class="text-gray-600">{item.tekst}</p>
+          <span class="text-sm font-bold text-accent mt-2 block">{item.godina}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
