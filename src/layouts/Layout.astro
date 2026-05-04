@@ -1,0 +1,23 @@
+---
+// src/layouts/Layout.astro
+
+// ОВО ЈЕ КЉУЧНО: Говори Astro-у да узме овај фајл, компајлира га, 
+// преузме фонтове из node_modules и све то спакује за Cloudflare!
+import '../styles/global.css';
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="sr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <!-- Овде Astro убацује садржај страница (Hero, Plan, Timeline итд.) -->
+    <slot />
+  </body>
+</html>
