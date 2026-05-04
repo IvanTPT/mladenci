@@ -7,15 +7,13 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
   <div class="section__inner w-full max-w-6xl mx-auto px-4">
     <h2 class="section__title">Присуство и Успомене</h2>
 
-    <!-- GRID: items-stretch осигурава да обе колоне буду исте висине -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mt-8">
+    <div class="rsvp-grid">
       
       <!-- ЛЕВА СТРАНА: RSVP -->
-      <!-- Додато h-full и flex-col да би се картица растегла до дна -->
-      <div class="card rsvp-container h-full flex flex-col p-8 rounded-xl shadow-lg bg-white">
+      <div class="card rsvp-card">
         <h2 id="form-title">Потврда доласка</h2>
         
-        <form id="rsvp-form" class="rsvp-form flex-1">
+        <form id="rsvp-form" class="rsvp-form">
           <fieldset>
             <legend>Ваши подаци</legend>
             <div class="input-group">
@@ -36,35 +34,32 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
             </button>
           </fieldset>
 
-          <!-- Дугме је гурнуто на дно уз помоћ mt-auto ако затреба -->
-          <button type="submit" id="submit-btn" class="primary-btn mt-auto">Потврди долазак</button>
+          <button type="submit" id="submit-btn" class="primary-btn">Потврди долазак</button>
         </form>
 
-        <div id="success-message" class="success-message h-full flex flex-col justify-center items-center" style="display: none;">
+        <div id="success-message" class="success-message" style="display: none;">
           <svg xmlns="http://www.w3.org/2000/svg" class="success-icon" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
           </svg>
-          <h3 class="text-xl">Хвала Вам што сте потврдили свој долазак, радујемо се скором виђењу.</h3>
+          <h3>Хвала Вам што сте потврдили свој долазак, радујемо се скором виђењу.</h3>
         </div>
       </div>
 
       <!-- ДЕСНА СТРАНА: Фотографије -->
-      <!-- Додато h-full да прати висину леве стране -->
-      <div class="card p-8 rounded-xl shadow-lg bg-white text-center h-full flex flex-col justify-center items-center">
-        <h2 class="text-3xl mb-6 font-display">Поделите успомене</h2>
+      <div class="card photo-card">
+        <h2 class="photo-title">Поделите успомене</h2>
         
-        <!-- Контејнери које JS контролише -->
         <div id="photo-message-container">
-          <p class="text-lg text-gray-600 mb-4">{data.poruka_pre_vremena}</p>
-          <div class="opacity-50 blur-sm pointer-events-none">
-            <img src={qrCodeUrl} alt="Замагљен QR код" class="mx-auto border p-2 rounded" />
+          <p class="photo-desc">{data.poruka_pre_vremena}</p>
+          <div class="blur-container">
+            <img src={qrCodeUrl} alt="Замагљен QR код" class="qr-img blur" />
           </div>
         </div>
 
         <div id="photo-qr-container" style="display: none;">
-          <p class="text-lg text-gray-600 mb-4">Скенирајте QR код и додајте ваше фотографије!</p>
-          <img src={qrCodeUrl} alt="QR код за албум" class="mx-auto border-2 border-accent p-2 rounded-xl hover:scale-105 transition" />
-          <a href={data.album_url} target="_blank" class="mt-4 inline-block text-accent underline hover:text-primary transition">Или кликните овде</a>
+          <p class="photo-desc">Скенирајте QR код и додајте ваше фотографије!</p>
+          <img src={qrCodeUrl} alt="QR код за албум" class="qr-img active-qr" />
+          <a href={data.album_url} target="_blank" class="album-link">Или кликните овде</a>
         </div>
       </div>
       
@@ -76,9 +71,7 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
 <div id="wedding-date-data" data-date={datumVencanja} style="display: none;"></div>
 
 <script>
-  // ==========================================
-  // 1. ЛОГИКА ЗА ФОТОГРАФИЈЕ (ПРИКАЗ QR КОДА)
-  // ==========================================
+  // Логика за Фотографије
   const targetDateStr = document.getElementById('wedding-date-data')?.dataset.date;
   if(targetDateStr) {
     const targetDate = new Date(targetDateStr).getTime();
@@ -95,9 +88,7 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
     }
   }
 
-  // ==========================================
-  // 2. ЛОГИКА ЗА RSVP ФОРМУ
-  // ==========================================
+  // Логика за RSVP форму
   const addGuestBtn = document.getElementById('add-guest-btn');
   const guestsContainer = document.getElementById('guests-container');
   const rsvpForm = document.getElementById('rsvp-form');
@@ -133,7 +124,6 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
     e.preventDefault();
     if(submitBtn) submitBtn.textContent = 'Шаљем...';
     
-    // Твој Google Script URL
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8izZ0PWNXTl0RREHobK6P3b6NdixRGAnj9dpaTmzQfMtKSY6oZH8AIRiTDKhxemAG/exec'; 
     
     const formData = new FormData(rsvpForm as HTMLFormElement);
@@ -158,7 +148,6 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
         body: JSON.stringify(data)
       });
 
-      // Приказ поруке о успеху
       rsvpForm.style.display = 'none';
       if(formTitle) formTitle.style.display = 'none';
       if(successMessage) successMessage.style.display = 'flex';
@@ -170,11 +159,40 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
 </script>
 
 <style>
-  /* Локални стилови за RSVP форму */
-  .rsvp-container h2 {
+  /* === GLAVNI GRID === */
+  .rsvp-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: stretch; /* Garantuje istu visinu kolona */
+    margin-top: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .rsvp-grid {
+      grid-template-columns: 1fr 1fr; /* Deli u dve kolone na desktopu */
+      gap: 3rem;
+    }
+  }
+
+  /* === ZAJEDNICKI STILOVI ZA KARTICE === */
+  .rsvp-card, .photo-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* === STILOVI ZA RSVP === */
+  .rsvp-card h2 {
     text-align: center;
     margin-bottom: 2rem;
-    color: var(--color-text-dark);
+    color: var(--color-primary);
+    font-size: 2.25rem;
+  }
+
+  .rsvp-form {
+    flex: 1; /* Tera formu da popuni prazan prostor do dugmeta */
+    display: flex;
+    flex-direction: column;
   }
 
   fieldset { border: none; padding: 0; margin: 0 0 1.5rem 0; }
@@ -185,17 +203,15 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
   
   input { 
     padding: 0.75rem; 
-    border: 1px solid color-mix(in srgb, var(--color-primary), transparent 70%);
-    background-color: color-mix(in srgb, var(--color-background), white 50%);
+    border: 1px solid rgba(181, 141, 104, 0.4);
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 0.5rem; 
     font-size: 1rem;
     color: var(--color-text-dark);
     outline: none;
     transition: border-color 0.2s;
   }
-  input:focus {
-    border-color: var(--color-accent);
-  }
+  input:focus { border-color: var(--color-accent); }
   
   button { cursor: pointer; font-weight: 600; border: none; border-radius: 0.5rem; transition: all 0.3s ease; }
   
@@ -203,41 +219,98 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
     width: 100%; 
     padding: 1rem; 
     background-color: var(--color-primary); 
-    color: var(--color-background); 
+    color: var(--color-secondary); 
     font-size: 1.1rem; 
-    margin-top: 1rem;
+    margin-top: auto; /* Gura dugme uvek na dno kartice */
   }
-  .primary-btn:hover { background-color: var(--color-text-dark); transform: translateY(-2px); }
+  .primary-btn:hover { background-color: var(--color-accent); transform: translateY(-2px); }
   
   .secondary-btn { 
     padding: 0.5rem 1rem; 
     background-color: var(--color-secondary); 
     color: var(--color-primary); 
+    border: 1px solid rgba(67, 74, 66, 0.1);
   }
-  .secondary-btn:hover { background-color: color-mix(in srgb, var(--color-secondary), black 10%); }
+  .secondary-btn:hover { background-color: rgba(67, 74, 66, 0.05); }
 
+  .success-message {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
   .success-icon { width: 60px; height: 60px; color: var(--color-accent); margin-bottom: 1rem; }
-  .success-message h3 { color: var(--color-primary); font-family: var(--font-lato); }
+  .success-message h3 { color: var(--color-primary); font-family: var(--font-lato); font-size: 1.25rem;}
+
+  /* === STILOVI ZA FOTOGRAFIJE === */
+  .photo-card {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .photo-title {
+    margin-bottom: 1.5rem;
+    color: var(--color-primary);
+    font-size: 2.25rem;
+  }
+
+  .photo-desc {
+    color: var(--color-text-dark);
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .qr-img {
+    margin: 0 auto;
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    background: white;
+  }
+
+  .blur-container {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: blur(4px);
+  }
+
+  .active-qr {
+    border: 2px solid var(--color-accent);
+    transition: transform 0.3s ease;
+  }
+  .active-qr:hover { transform: scale(1.05); }
+
+  .album-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--color-accent);
+    text-decoration: underline;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .album-link:hover { color: var(--color-primary); }
 </style>
 
 <style is:global>
-  /* Глобални стилови за динамички додате госте у RSVP форми */
+  /* Gosti (Javascript) */
   .guest-row {
     display: flex; gap: 1rem; align-items: flex-end; margin-bottom: 1rem;
-    background: color-mix(in srgb, var(--color-background), white 30%);
+    background: rgba(255, 255, 255, 0.5);
     padding: 1rem; border-radius: 0.5rem;
-    border: 1px dashed color-mix(in srgb, var(--color-primary), transparent 60%);
+    border: 1px dashed rgba(181, 141, 104, 0.4);
   }
   .guest-input-group { display: flex; flex-direction: column; flex: 1; }
   .guest-input-group label { margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--color-primary); }
-  .guest-input { padding: 0.75rem; border: 1px solid color-mix(in srgb, var(--color-primary), transparent 70%); border-radius: 0.5rem; width: 100%; box-sizing: border-box; }
+  .guest-input { padding: 0.75rem; border: 1px solid rgba(181, 141, 104, 0.4); border-radius: 0.5rem; width: 100%; box-sizing: border-box; }
   
   .remove-btn { 
     background-color: transparent; 
-    color: var(--color-accent); 
-    border: 1px solid var(--color-accent);
+    color: #e53e3e; 
+    border: 1px solid #e53e3e;
     padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: center; height: 42px; 
     border-radius: 0.5rem;
   }
-  .remove-btn:hover { background-color: var(--color-accent); color: white; }
+  .remove-btn:hover { background-color: #e53e3e; color: white; }
 </style>
