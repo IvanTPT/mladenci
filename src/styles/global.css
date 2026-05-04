@@ -1,0 +1,7 @@
+/* src/styles/global.css */
+@import "@fontsource-variable/inter/index.css";
+@import "@fontsource/playfair-display/latin.css";
+@import "@fontsource/marck-script"; 
+@import "tailwindcss";
+
+/* ... остатак твог CSS-а ... */
