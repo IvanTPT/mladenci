@@ -10,9 +10,14 @@ const { data } = Astro.props;
       <div class="schedule-list">
         {data.lokacije.map((stavka: any) => (
           <div class="schedule-item">
-            <div class="time">{stavka.vreme}</div>
-            <div class="details">
+            <!-- Време, црта и наслов сада стоје у једној линији -->
+            <div class="schedule-header">
+              <span class="time">{stavka.vreme}</span>
+              <span class="separator">—</span>
               <h3>{stavka.naziv}</h3>
+            </div>
+            
+            <div class="details">
               <p>{stavka.opis}</p>
             </div>
           </div>
@@ -33,24 +38,23 @@ const { data } = Astro.props;
 </section>
 
 <style>
-  /* === GLAVNI GRID ZA RASPORED === */
+  /* === ГЛАВНИ GRID ЗА РАСПОРЕД === */
   .plan-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Za mobilne telefone: 1 kolona (jedno ispod drugog) */
+    grid-template-columns: 1fr; 
     gap: 2rem;
-    align-items: stretch; /* OVO garantuje da su leva i desna strana iste visine! */
+    align-items: stretch; /* Гарантује исту висину леве и десне стране */
     margin-top: 2.5rem;
   }
 
-  /* Za tablete i kompjutere (širina ekrana veća od 768px) */
   @media (min-width: 768px) {
     .plan-grid {
-      grid-template-columns: 1fr 1fr; /* Na silu deli u 2 jednake kolone */
+      grid-template-columns: 1fr 1fr; 
       gap: 3rem;
     }
   }
 
-  /* === STILOVI ZA LEVU STRANU (PLAN) === */
+  /* === СТИЛОВИ ЗА ЛЕВУ СТРАНУ (ПЛАН) === */
   .schedule-list {
     display: flex;
     flex-direction: column;
@@ -71,18 +75,32 @@ const { data } = Astro.props;
     transform: translateX(10px);
   }
 
+  /* НОВО: Заједнички ред за време и наслов */
+  .schedule-header {
+    display: flex;
+    align-items: baseline; /* Поравнава доње ивице текста */
+    gap: 0.75rem; /* Размак између времена, црте и наслова */
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap; /* Заштита за веома мале екране телефона */
+  }
+
   .time {
     font-weight: bold;
     color: var(--color-accent);
     font-size: 1.5rem;
-    margin-bottom: 0.25rem;
   }
 
-  .details h3 {
+  .separator {
+    color: var(--color-accent);
+    font-weight: bold;
+    opacity: 0.7;
+  }
+
+  .schedule-header h3 {
     font-size: 1.25rem;
     font-weight: bold;
     color: var(--color-primary);
-    margin-bottom: 0.25rem;
+    margin: 0; /* Маргина је уклоњена јер је сада хендлује schedule-header */
   }
 
   .details p {
@@ -92,20 +110,20 @@ const { data } = Astro.props;
     margin: 0;
   }
 
-  /* === STILOVI ZA DESNU STRANU (MAPA) === */
+  /* === СТИЛОВИ ЗА ДЕСНУ СТРАНУ (МАПА) === */
   .map-container {
     background: rgba(255, 255, 255, 0.85);
     border-radius: 1rem;
     overflow: hidden;
     box-shadow: var(--shadow-card);
     border: 1px solid rgba(181, 141, 104, 0.3);
-    min-height: 350px; /* Minimalna visina za svaki slučaj */
-    position: relative; /* Bitno za iframe */
+    min-height: 350px; 
+    position: relative; 
     width: 100%;
   }
   
   .map-container iframe {
-    position: absolute; /* Rasteže iframe tačno na dimenzije kontejnera */
+    position: absolute; 
     top: 0;
     left: 0;
     width: 100%;
