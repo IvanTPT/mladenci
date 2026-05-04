@@ -8,9 +8,10 @@ const { data } = Astro.props;
     <div class="plan-grid">
       <!-- ЛЕВА СТРАНА: План -->
       <div class="schedule-list">
-        {data.lokacije.map((stavka: any) => (
-          <div class="schedule-item">
-            <!-- Време, црта и наслов сада стоје у једној линији -->
+        <!-- Додајемо индекс у map функцију како бисмо направили кашњење -->
+        {data.lokacije.map((stavka: any, index: number) => (
+          <!-- Динамички убацујемо transition-delay да сваки следећи елемент касни 100ms -->
+          <div class="schedule-item" style={`transition-delay: ${index * 100}ms;`}>
             <div class="schedule-header">
               <span class="time">{stavka.vreme}</span>
               <span class="separator">—</span>
@@ -43,7 +44,7 @@ const { data } = Astro.props;
     display: grid;
     grid-template-columns: 1fr; 
     gap: 2rem;
-    align-items: stretch; /* Гарантује исту висину леве и десне стране */
+    align-items: stretch;
     margin-top: 2.5rem;
   }
 
@@ -62,7 +63,6 @@ const { data } = Astro.props;
     gap: 1.5rem;
   }
 
-/* Измени постојећу schedule-item класу */
   .schedule-item {
     background: rgba(255, 255, 255, 0.85);
     padding: 1.5rem;
@@ -70,30 +70,29 @@ const { data } = Astro.props;
     border-left: 4px solid var(--color-accent);
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     
-    /* ДОДАТО ЗА АНИМАЦИЈУ: Почетно стање је невидљиво и спуштено */
+    /* Почетно стање за анимацију */
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   }
 
-  /* ДОДАТО: Стање када постане видљиво */
+  /* Стање када постане видљиво */
   .schedule-item.is-visible {
     opacity: 1;
     transform: translateY(0);
   }
 
-  /* Опционо: задржи ховер ефекат али га раздвој */
+  /* Ховер ефекат - исправљен да не поништава видљивост */
   .schedule-item.is-visible:hover {
-    transform: translateX(10px);
+    transform: translateY(0) translateX(10px);
   }
 
-  /* НОВО: Заједнички ред за време и наслов */
   .schedule-header {
     display: flex;
-    align-items: baseline; /* Поравнава доње ивице текста */
-    gap: 0.75rem; /* Размак између времена, црте и наслова */
+    align-items: baseline; 
+    gap: 0.75rem; 
     margin-bottom: 0.5rem;
-    flex-wrap: wrap; /* Заштита за веома мале екране телефона */
+    flex-wrap: wrap; 
   }
 
   .time {
@@ -112,7 +111,7 @@ const { data } = Astro.props;
     font-size: 1.25rem;
     font-weight: bold;
     color: var(--color-primary);
-    margin: 0; /* Маргина је уклоњена јер је сада хендлује schedule-header */
+    margin: 0; 
   }
 
   .details p {
@@ -123,11 +122,18 @@ const { data } = Astro.props;
   }
 
   /* === СТИЛОВИ ЗА ДЕСНУ СТРАНУ (МАПА) === */
-/* Измени постојећу map-container класу */
   .map-container {
-    /* ... твоји постојећи стилови за мапу ... */
+    /* Враћени обрисани стилови како мапа не би пукла */
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(181, 141, 104, 0.3);
+    min-height: 350px; 
+    position: relative; 
+    width: 100%;
     
-    /* ДОДАТО ЗА АНИМАЦИЈУ */
+    /* Анимација */
     opacity: 0;
     transform: scale(0.95);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
@@ -147,21 +153,26 @@ const { data } = Astro.props;
     border: 0;
   }
 </style>
+
 <script>
-  const scheduleItems = document.querySelectorAll('.schedule-item');
-  const mapContainer = document.querySelector('.map-container');
+  // Покрећемо скрипту када се DOM учита да осигурамо да су елементи ту
+  document.addEventListener('DOMContentLoaded', () => {
+    const scheduleItems = document.querySelectorAll('.schedule-item');
+    const mapContainer = document.querySelector('.map-container');
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        // Додајемо благо кашњење за сваку следећу ставку (stagger ефекат)
-        setTimeout(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // Једноставно додајемо класу, кашњење сада ради преко CSS transition-delay-a
           entry.target.classList.add('is-visible');
-        }, index * 100); 
-      }
-    });
-  }, { threshold: 0.1 });
+          
+          // Опционо: престајемо да посматрамо елемент како се не би поново анимирао кад скролујеш горе
+          observer.unobserve(entry.target); 
+        }
+      });
+    }, { threshold: 0.1 });
 
-  scheduleItems.forEach(item => observer.observe(item));
-  if (mapContainer) observer.observe(mapContainer);
+    scheduleItems.forEach(item => observer.observe(item));
+    if (mapContainer) observer.observe(mapContainer);
+  });
 </script>
