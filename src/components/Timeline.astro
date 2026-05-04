@@ -37,12 +37,11 @@ const { data } = Astro.props;
     </div>
   </div>
 </section>
-
 <style>
-  /* === ГЛАВНИ ОМОТАЧ И ЛИНИЈА === */
+  /* === GLAVNI OMOTAČ I LINIJA === */
   .timeline-wrapper {
     position: relative;
-    max-width: 1000px;
+    max-width: 1100px; /* Povećano da bi bilo više mesta za tekst */
     margin: 0 auto;
     padding: 2rem 0;
   }
@@ -59,7 +58,7 @@ const { data } = Astro.props;
     z-index: 1;
   }
 
-  /* === РЕДОВИ === */
+  /* === REDOVI === */
   .timeline-row {
     display: flex;
     width: 100%;
@@ -74,7 +73,7 @@ const { data } = Astro.props;
   .timeline-dot {
     position: absolute;
     left: 50%;
-    top: 3.5rem; /* Поравнато са средином велике године */
+    top: 3.5rem; /* Poravnato sa sredinom velike godine */
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -85,56 +84,60 @@ const { data } = Astro.props;
     box-shadow: 0 0 10px rgba(0,0,0,0.05);
   }
 
-  /* === САДРЖАЈ И НАИЗМЕНИЧНИ (ЦИК-ЦАК) РАСПОРЕД === */
+  /* === SADRŽAJ I NAIZMENIČNI (CIK-CAK) RASPORED === */
   .timeline-content {
     display: flex;
-    width: calc(50% - 4rem); /* 50% ширине минус простор до централне линије */
-    gap: 3rem;
-    align-items: center; /* Вертикално центрира текст у односу на слику */
+    width: 50%; /* Zakucano na tačno 50% ekrana da nikad ne pređe liniju */
+    gap: 2.5rem;
+    align-items: center; 
   }
 
-  /* ЛЕВА СТРАНА */
+  /* LEVA STRANA */
   .left-row {
-    justify-content: flex-start; /* Ставља цео блок на леву половину екрана */
+    justify-content: flex-start; 
   }
   .left-row .timeline-content {
-    flex-direction: row; /* Текст лево, слика десно (до линије) */
+    flex-direction: row; 
+    padding-right: 4rem; /* Fiksni prostor od slike do centralne linije */
   }
   .left-row .text-box {
-    text-align: right; /* Текст поравнат уз слику */
+    text-align: right; 
   }
   .left-row .media-box {
-    align-items: flex-end; /* Година поравната уз саму линију (десно) */
+    align-items: flex-end; 
   }
 
-  /* ДЕСНА СТРАНА */
+  /* DESNA STRANA */
   .right-row {
-    justify-content: flex-end; /* Ставља цео блок на десну половину екрана */
+    justify-content: flex-end; 
   }
   .right-row .timeline-content {
-    flex-direction: row-reverse; /* Слика лево (до линије), текст десно */
+    flex-direction: row-reverse; 
+    padding-left: 4rem; /* Fiksni prostor od slike do centralne linije */
   }
   .right-row .text-box {
-    text-align: left; /* Текст поравнат уз слику */
+    text-align: left; 
   }
   .right-row .media-box {
-    align-items: flex-start; /* Година поравната уз саму линију (лево) */
+    align-items: flex-start; 
   }
 
-  /* === ДИЗАЈН ПОЈЕДИНАЧНИХ ЕЛЕМЕНАТА === */
+  /* === DIZAJN POJEDINAČNIH ELEMENATA === */
   .text-box {
-    flex: 1; /* Текст заузима сав преостали простор */
+    flex: 1; 
+    min-width: 180px; /* Sprečava da se tekst slomi na po jedno slovo */
   }
 
   .text-box h3 {
-    font-size: 2rem;
+    font-size: 2.25rem;
     color: var(--color-primary);
     margin-bottom: 0.75rem;
-    font-family: var(--font-playfair); /* Задржавамо елеганцију за мање наслове */
+    font-family: var(--font-playfair); 
+    line-height: 1.2;
   }
 
   .text-box p {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: var(--color-text-dark);
     opacity: 0.8;
     line-height: 1.7;
@@ -143,14 +146,14 @@ const { data } = Astro.props;
   .media-box {
     display: flex;
     flex-direction: column;
-    width: 320px; /* Фиксна ширина за све слике */
+    width: 280px; /* Malo suženo kako bi tekst dobio na širini */
     flex-shrink: 0;
     position: relative;
     z-index: 3;
   }
 
   .year {
-    font-family: var(--font-display); /* Marck Script (Курзив) */
+    font-family: var(--font-display); 
     font-size: 6.5rem;
     color: var(--color-accent);
     line-height: 0.8;
@@ -160,11 +163,11 @@ const { data } = Astro.props;
 
   .media-box img {
     width: 100%;
-    height: 400px;
+    height: 380px;
     object-fit: cover;
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
-    border: 6px solid white; /* Изглед класичне фотографије/полароида */
+    border: 6px solid white; 
     transition: transform 0.4s ease;
   }
 
@@ -172,7 +175,7 @@ const { data } = Astro.props;
     transform: translateY(-5px);
   }
 
-  /* === ПРИЛАГОЂАВАЊЕ ЗА МОБИЛНЕ ТЕЛЕФОНЕ === */
+  /* === PRILAGOĐAVANJE ZA MOBILNE TELEFONE === */
   @media (max-width: 900px) {
     .timeline-center-line {
       left: 20px;
@@ -181,33 +184,35 @@ const { data } = Astro.props;
     
     .timeline-dot {
       left: 20px;
-      transform: translateX(-50%); /* Да би тачка била тачно на средини линије */
+      transform: translateX(-50%); 
     }
 
     .timeline-row {
-      justify-content: flex-end; /* Сви редови иду на десну страну од линије */
+      justify-content: flex-end; 
       margin-bottom: 5rem;
     }
 
     .timeline-content {
-      width: calc(100% - 60px); /* 100% ширине минус простор за линију са леве стране */
-      flex-direction: column-reverse !important; /* Увек прво Слика+Година, па онда Текст испод */
+      width: 100%; 
+      padding-left: 4rem !important; /* Gura sav sadržaj desno od linije na telefonu */
+      padding-right: 1rem !important;
+      flex-direction: column-reverse !important; 
       gap: 1.5rem;
       align-items: flex-start !important;
     }
 
-    /* На мобилном све поравнавамо лево */
     .left-row .text-box, .right-row .text-box {
       text-align: left;
     }
     
     .left-row .media-box, .right-row .media-box {
       width: 100%;
+      max-width: 320px;
       align-items: flex-start;
     }
 
     .media-box img {
-      height: 300px; /* Мало нижа слика на телефонима */
+      height: 300px; 
     }
 
     .year {
