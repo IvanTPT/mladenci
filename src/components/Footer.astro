@@ -1,0 +1,10 @@
+---
+const { data } = Astro.props;
+---
+<footer class="bg-primary text-white py-8 text-center">
+  <p class="text-lg">Хвала вам што делите наш посебан дан са нама!</p>
+  <div class="mt-8 pt-8 border-t border-gray-600 text-sm opacity-70">
+    <p>&copy; {data.godina} Дизајн и израда: {data.kreator}</p>
+    <p>Контакт програмера: <a href={`mailto:${data.kontakt}`} class="underline">{data.kontakt}</a></p>
+  </div>
+</footer>
