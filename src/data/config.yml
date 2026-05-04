@@ -4,7 +4,7 @@ vencanje:
   datum_iso: "2026-08-09T14:00:00" 
   datum_prikaz: "09 . 08 . 2026"
   muzika_url: "/audio/nasa-pesma.mp3" 
-  hero_slika: "/images/hero-bg.jpg" 
+  hero_slika: "/src/images/hero-bg.jpg" 
 
 plan:
   lokacije:
