@@ -1,4 +1,4 @@
-# src/data/config.yaml
+# src/data/config.yml
 vencanje:
   imena: "Анђела и Миљан"
   datum_iso: "2026-08-09T14:00:00" # За одбројавање и логику
