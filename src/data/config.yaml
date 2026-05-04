@@ -1,0 +1,44 @@
+# src/data/config.yaml
+vencanje:
+  imena: "Анђела и Миљан"
+  datum_iso: "2026-08-09T14:00:00" # За одбројавање и логику
+  datum_prikaz: "09 . 08 . 2026"
+  muzika_url: "/audio/nasa-pesma.mp3" # Стави песму у public/audio/ фасциклу
+  hero_slika: "/images/hero-bg.jpg" # Стави слику у public/images/
+
+plan:
+  lokacije:
+    - vreme: "14:00"
+      naziv: "Окупљање гостију"
+      opis: "Event Centar Vila Рајчић, Крагујевац"
+    - vreme: "15:00"
+      naziv: "Црквено венчање"
+      opis: "Храм у близини"
+    - vreme: "16:30"
+      naziv: "Свечани ручак и прослава"
+      opis: "Сала за прославе"
+  mapa_embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2830.4...TBOJ_EMBED_LINK"
+
+interakcija:
+  google_script_url: "ZAMENI_SA_TVOJIM_SCRIPT_LINKOM"
+  album_url: "https://photos.app.goo.gl/TBOJ_ALBUM"
+  poruka_pre_vremena: "Албум за дељење фотографија биће доступан на дан нашег венчања. Припремите своје камере!"
+
+prica:
+  - godina: "2021"
+    naslov: "Први сусрет"
+    tekst: "Упознали смо се сасвим случајно..."
+    slika: "/images/prica-1.jpg"
+  - godina: "2023"
+    naslov: "Наше прво путовање"
+    tekst: "Заједно смо обишли..."
+    slika: "/images/prica-2.jpg"
+  - godina: "2025"
+    naslov: "Рекла је да!"
+    tekst: "Тренутак који ћемо заувек памтити..."
+    slika: "/images/prica-3.jpg"
+
+footer:
+  kreator: "Твоје Име / Студио"
+  kontakt: "info@tvojdomen.com"
+  godina: "2026"
