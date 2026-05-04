@@ -2,24 +2,37 @@
 const { data } = Astro.props;
 ---
 <section class="section">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto px-4">
-    <!-- Лева страна: План -->
-    <div class="schedule-list">
-      <h2 class="text-4xl mb-8 font-display">План и програм</h2>
-      {data.lokacije.map((stavka: any) => (
-        <div class="schedule-item mb-6 flex gap-4">
-          <div class="time font-bold text-accent text-xl">{stavka.vreme}</div>
-          <div class="details">
-            <h3 class="text-lg font-bold">{stavka.naziv}</h3>
-            <p class="text-gray-600">{stavka.opis}</p>
-          </div>
-        </div>
-      ))}
-    </div>
+  <div class="section__inner w-full max-w-6xl mx-auto px-4">
+    <h2 class="section__title">План и програм</h2>
     
-    <!-- Десна страна: Мапа -->
-    <div class="map-container rounded-xl overflow-hidden shadow-lg h-96 md:h-auto">
-      <iframe src={data.mapa_embed} width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    <!-- GRID који дели екран на 2 дела и растеже их на исту висину (items-stretch) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-stretch mt-10">
+      
+      <!-- ЛЕВА СТРАНА: План и програм -->
+      <div class="schedule-list flex flex-col justify-center gap-6">
+        {data.lokacije.map((stavka: any) => (
+          <div class="schedule-item">
+            <div class="time font-bold text-accent text-2xl mb-1">{stavka.vreme}</div>
+            <div class="details">
+              <h3 class="text-xl font-bold text-primary mb-1">{stavka.naziv}</h3>
+              <p class="text-gray-600 leading-relaxed">{stavka.opis}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <!-- ДЕСНА СТРАНА: Мапа -->
+      <!-- 'relative' и 'h-full' су кључни да би контејнер пратио висину леве стране -->
+      <div class="map-container rounded-xl overflow-hidden shadow-card border border-accent/30 w-full min-h-[350px] h-full relative">
+        <iframe 
+          src={data.mapa_embed} 
+          class="absolute inset-0 w-full h-full object-cover" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy">
+        </iframe>
+      </div>
+
     </div>
   </div>
 </section>
