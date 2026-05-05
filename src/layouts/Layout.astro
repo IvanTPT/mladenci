@@ -7,7 +7,6 @@ interface Props {
 }
 
 const { title } = Astro.props;
-const ogImageURL = new URL('/og-image.jpg', Astro.site)
 ---
 
 <!doctype html>
@@ -17,7 +16,7 @@ const ogImageURL = new URL('/og-image.jpg', Astro.site)
     <meta name="description" content="Позивница за венчање и прославу." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image" content="/og-image.jpg" />
     <title>{title}</title>
   </head>
   <body>
