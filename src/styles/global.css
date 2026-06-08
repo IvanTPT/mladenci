@@ -33,7 +33,7 @@
     /* Палета боја прилагођена венчању */
     --color-primary: #434a42; /* Маслинасто зелена */
     --color-secondary: #f4f1ea; /* Топла крем/беж боја */
-    --color-accent: #b58d68; /* Елегантна златна/шампањац боја */
+    --color-accent: #dacfc6; /* Елегантна златна/шампањац боја */
     --color-text-dark: #2c312b;
     --color-text-light: #f4f1ea;
     --color-background: #faf8f5; /* Врло светла крем позадина */
@@ -178,7 +178,7 @@
     letter-spacing: 0.3em;
     margin-top: 1rem;
     text-transform: uppercase;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.5);
   }
 
   .divider {
