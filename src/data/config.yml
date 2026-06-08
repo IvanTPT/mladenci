@@ -10,7 +10,7 @@ plan:
   lokacije:
     - vreme: "11:00"
       naziv: "Окупљање гостију"
-      opis: "А - Владимира Роловиђа 21/17, Крагујевац"
+      opis: "А - Владимира Роловића 21/17, Крагујевац"
     - vreme: "13:00"
       naziv: "Црквено венчање"
       opis: "B - Манастир Драча, Крагујевац"
@@ -22,13 +22,6 @@ plan:
       opis: "C - Евент центар - Вила Рајчић, Драгобраћа" 
     - vreme: "17:30"
       naziv: "Журка"
-      opis: "C - Евент центар - Вила Рајчић, Драгобраћа"
-    - vreme: "21:00"
-      naziv: "Свадбена торта"
-      opis: "C - Евент центар - Вила Рајчић, Драгобраћа"
-    - vreme: "21:30"
-      naziv: "Журка, журка"
-      opis: "C - Евент центар - Вила Рајчић, Драгобраћа"
   mapa_embed: "https://www.google.com/maps/d/u/0/embed?mid=1h6AdwcFwHy594_QKviVzqNjw2uy4YhE&ehbc=2E312F"
 
 interakcija:
@@ -51,6 +44,6 @@ prica:
     slika: "/images/prica-3.jpg"
 
 footer:
-  kreator: "Твоје Име / Студио"
-  kontakt: "info@tvojdomen.com"
+  kreator: "radujse.online"
+  kontakt: "emediars@gmail.com"
   godina: "2026"

@@ -23,12 +23,12 @@ const { data } = Astro.props;
       <p class="contact-label">За сва ваша весеља:</p>
       
       <!-- Интерактивни Email -->
-      <a href="mailto:emediars@gmail.com" class="email-link">
-        <span class="email-text">emediars@gmail.com</span>
+      <a href="mailto:{data.kontakt}" class="email-link">
+        <span class="email-text">{data.kontakt}</span>
       </a>
       
       <!-- Потпис аутора -->
-      <p class="author-signature">Иван Крстић</p>
+      <p class="author-signature">{data.kreator}</p>
     </div>
 
   </div>
