@@ -12,7 +12,7 @@ export async function GET() {
     const data = yaml.load(configFile) as any;
     
     // 1. Подаци
-    const imenaRaw = data.hero?.imena || data.imena || "Анђела & Миљан";
+    const imenaRaw = data.hero?.imena || data.imena || "Анђела и Миљан";
     let [ime1, ime2] = imenaRaw.split(/&| и /i).map((s: string) => s.trim());
     if (!ime2) {
       ime1 = "Анђела";
@@ -28,6 +28,10 @@ export async function GET() {
     const vreme = glavniDogadjaj?.vreme || "16:00";
     const lokacija = glavniDogadjaj?.opis || "Вила Рајчић, Драгобраћа";
 
+    // Учитавање позадинске слике у Base64
+    const bgBuffer = await fs.readFile('./public/images/hero-bg.jpg');
+    const bgBase64 = `data:image/jpeg;base64,${bgBuffer.toString('base64')}`;
+
     // 2. Учитавање фонтова
     const [playfairCyr, playfairLat, marckCyr, marckLat] = await Promise.all([
       fetch('https://unpkg.com/@fontsource/playfair-display@5.0.8/files/playfair-display-cyrillic-400-normal.woff').then(res => res.arrayBuffer()),
@@ -36,69 +40,75 @@ export async function GET() {
       fetch('https://unpkg.com/@fontsource/marck-script@5.0.8/files/marck-script-latin-400-normal.woff').then(res => res.arrayBuffer())
     ]);
 
-    // Чувамо знак & у променљивој да га HTML парсер не би претворио у &amp;
-    const znakI = '&';
-
-    // 3. Дизајн (Обрати пажњу на font-family: 'PlayfairCyr', 'PlayfairLat' - ово осигурава да оба раде!)
+    // 3. Дизајн - додато стапање позадинске слике и винтаж боје
     const markup = html`
-      <div style="display: flex; flex-direction: column; width: 100%; height: 100%; background-color: #f4f0e6; color: #4a453d; font-family: 'PlayfairCyr', 'PlayfairLat', serif; padding: 40px; box-sizing: border-box;">
+      <div style="display: flex; flex-direction: column; width: 100%; height: 100%; background-image: url('${bgBase64}'); background-size: cover; background-position: center; font-family: 'PlayfairCyr', 'PlayfairLat', serif; box-sizing: border-box;">
         
-        <div style="display: flex; flex-direction: column; width: 100%; height: 100%; border: 2px solid #bba585; position: relative; align-items: center; justify-content: center; padding: 40px; box-sizing: border-box;">
+        <!-- Полупровидан слој винтаж папира (rgba 244, 240, 230 са 88% непрозирности) -->
+        <div style="display: flex; flex-direction: column; width: 100%; height: 100%; background-color: rgba(244, 240, 230, 0.88); color: #4a453d; padding: 40px; box-sizing: border-box;">
           
-          <svg style="position: absolute; top: 15px; left: 15px;" width="60" height="60" viewBox="0 0 100 100">
-            <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
-            <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
-            <circle cx="10" cy="10" r="5" fill="#bba585" />
-          </svg>
-          <svg style="position: absolute; top: 15px; right: 15px; transform: rotate(90deg);" width="60" height="60" viewBox="0 0 100 100">
-            <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
-            <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
-            <circle cx="10" cy="10" r="5" fill="#bba585" />
-          </svg>
-          <svg style="position: absolute; bottom: 15px; left: 15px; transform: rotate(270deg);" width="60" height="60" viewBox="0 0 100 100">
-            <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
-            <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
-            <circle cx="10" cy="10" r="5" fill="#bba585" />
-          </svg>
-          <svg style="position: absolute; bottom: 15px; right: 15px; transform: rotate(180deg);" width="60" height="60" viewBox="0 0 100 100">
-            <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
-            <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
-            <circle cx="10" cy="10" r="5" fill="#bba585" />
-          </svg>
-
-          <p style="font-size: 20px; letter-spacing: 0.15em; margin: 0; text-transform: uppercase;">Позивамо вас на наше</p>
-          <p style="font-size: 30px; letter-spacing: 0.25em; margin-top: 10px; margin-bottom: 40px; text-transform: uppercase;">Венчање</p>
-
-          <h1 style="font-family: 'MarckCyr', 'MarckLat', cursive; font-size: 110px; margin: 0; font-weight: normal; line-height: 0.8;">${ime1}</h1>
-          <span style="font-family: 'MarckCyr', 'MarckLat', cursive; font-size: 80px; margin: 5px 0;">${znakI}</span>
-          <h1 style="font-family: 'MarckCyr', 'MarckLat', cursive; font-size: 110px; margin: 0; font-weight: normal; line-height: 0.8;">${ime2}</h1>
-
-          <div style="display: flex; align-items: center; justify-content: center; margin-top: 60px;">
-            <span style="font-size: 28px; letter-spacing: 0.1em; text-transform: uppercase;">Датум</span>
+          <div style="display: flex; flex-direction: column; width: 100%; height: 100%; border: 2px solid #bba585; position: relative; align-items: center; justify-content: center; padding: 40px; box-sizing: border-box;">
             
-            <div style="display: flex; width: 2px; height: 60px; background-color: #bba585; margin: 0 40px;"></div>
-            
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-              <span style="font-size: 38px; font-weight: bold; margin: 0; line-height: 1;">${datum.split(' ')[0]}</span>
-              <span style="font-size: 24px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 5px;">${datum.split(' ').slice(1).join(' ')}</span>
+            <!-- SVG Орнаменти у ћошковима -->
+            <svg style="position: absolute; top: 20px; left: 20px;" width="70" height="70" viewBox="0 0 100 100">
+              <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
+              <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
+              <circle cx="10" cy="10" r="5" fill="#bba585" />
+            </svg>
+            <svg style="position: absolute; top: 20px; right: 20px; transform: rotate(90deg);" width="70" height="70" viewBox="0 0 100 100">
+              <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
+              <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
+              <circle cx="10" cy="10" r="5" fill="#bba585" />
+            </svg>
+            <svg style="position: absolute; bottom: 20px; left: 20px; transform: rotate(270deg);" width="70" height="70" viewBox="0 0 100 100">
+              <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
+              <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
+              <circle cx="10" cy="10" r="5" fill="#bba585" />
+            </svg>
+            <svg style="position: absolute; bottom: 20px; right: 20px; transform: rotate(180deg);" width="70" height="70" viewBox="0 0 100 100">
+              <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
+              <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
+              <circle cx="10" cy="10" r="5" fill="#bba585" />
+            </svg>
+
+            <!-- ЗАГЛАВЉЕ -->
+            <p style="font-size: 24px; letter-spacing: 0.15em; margin: 0; text-transform: uppercase;">Позивамо вас на наше</p>
+            <p style="font-size: 36px; letter-spacing: 0.25em; margin-top: 15px; margin-bottom: 60px; text-transform: uppercase;">Венчање</p>
+
+            <!-- ИМЕНА И слово "и" -->
+            <h1 style="font-family: 'MarckCyr', 'MarckLat', cursive; font-size: 140px; margin: 0; font-weight: normal; line-height: 0.8;">${ime1}</h1>
+            <span style="font-family: 'MarckCyr', 'MarckLat', cursive; font-size: 100px; margin: 15px 0;">и</span>
+            <h1 style="font-family: 'MarckCyr', 'MarckLat', cursive; font-size: 140px; margin: 0; font-weight: normal; line-height: 0.8;">${ime2}</h1>
+
+            <!-- ДАТУМ И ВРЕМЕ СА ЛИНИЈАМА -->
+            <div style="display: flex; align-items: center; justify-content: center; margin-top: 80px;">
+              <span style="font-size: 32px; letter-spacing: 0.1em; text-transform: uppercase;">Датум</span>
+              
+              <div style="display: flex; width: 2px; height: 70px; background-color: #bba585; margin: 0 40px;"></div>
+              
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <span style="font-size: 46px; font-weight: bold; margin: 0; line-height: 1;">${datum.split(' ')[0]}</span>
+                <span style="font-size: 28px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 5px;">${datum.split(' ').slice(1).join(' ')}</span>
+              </div>
+
+              <div style="display: flex; width: 2px; height: 70px; background-color: #bba585; margin: 0 40px;"></div>
+              
+              <span style="font-size: 38px; letter-spacing: 0.1em;">${vreme}h</span>
             </div>
 
-            <div style="display: flex; width: 2px; height: 60px; background-color: #bba585; margin: 0 40px;"></div>
-            
-            <span style="font-size: 32px; letter-spacing: 0.1em;">${vreme}h</span>
+            <!-- ЛОКАЦИЈА -->
+            <p style="font-size: 28px; margin-top: 70px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: bold;">Локација</p>
+            <p style="font-size: 26px; margin-top: 15px; opacity: 0.9;">${lokacija}</p>
+
           </div>
-
-          <p style="font-size: 24px; margin-top: 50px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: bold;">Локација</p>
-          <p style="font-size: 22px; margin-top: 10px; opacity: 0.9;">${lokacija}</p>
-
         </div>
       </div>
     `;
 
-    // 4. Повезивање фонтова у Satori са РАЗЛИЧИТИМ именима
+    // 4. Генерисање са новим димензијама
     const svg = await satori(markup, {
       width: 900,
-      height: 1157,
+      height: 1157, // Твоје прилагођене димензије
       fonts: [
         { name: 'PlayfairLat', data: playfairLat, weight: 400, style: 'normal' },
         { name: 'PlayfairCyr', data: playfairCyr, weight: 400, style: 'normal' },
