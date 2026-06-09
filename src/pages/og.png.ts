@@ -16,16 +16,16 @@ export async function GET() {
     // Раздвајамо имена да би их ставили једно испод другог (тражи & или ' и ')
     let [ime1, ime2] = imenaRaw.split(/&| и /i).map((s: string) => s.trim());
     if (!ime2) {
-      ime1 = "Миљан";
-      ime2 = "Анђела";
+      ime1 = "Анђела";  
+      ime2 = "Миљан";
     }
     
-    let datum = data.hero?.datum || data.osnovno?.datum || data.datum || "16. Август 2026.";
+    let datum = data.hero?.datum || data.osnovno?.datum || data.datum || "09. август 2026. године.";
     if (datum instanceof Date) {
       datum = datum.toLocaleDateString('sr-RS');
     }
     
-    const glavniDogadjaj = data.plan?.lokacije?.find((l: any) => l.naziv.includes('ручак') || l.naziv.includes('Сватов')) || data.plan?.lokacije[2];
+    const glavniDogadjaj = data.plan?.lokacije?.find((l: any) => l.naziv.includes('ручак') || l.naziv.includes('Сватовa')) || data.plan?.lokacije[2];
     const vreme = glavniDogadjaj?.vreme || "16:00";
     const lokacija = glavniDogadjaj?.opis || "Вила Рајчић, Драгобраћа";
 
