@@ -24,7 +24,7 @@ export async function GET() {
       datum = datum.toLocaleDateString('sr-RS');
     }
     
-    const glavniDogadjaj = data.plan?.lokacije?.find((l: any) => l.naziv.includes('ручак') || l.naziv.includes('Сватов')) || data.plan?.lokacije[2];
+    const glavniDogadjaj = data.vencanje?.lokacija || data.plan?.lokacije?.find((l: any) => l.naziv.includes('ручак') || l.naziv.includes('Сватов')) || data.plan?.lokacije[2];
     const vreme = glavniDogadjaj?.vreme || "16:00";
     
     // Брисање евентуалног "С -" које се поткрало у називу локације
