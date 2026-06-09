@@ -21,14 +21,16 @@ const { data } = Astro.props;
     <!-- Контакт секција -->
     <div class="contact-box" id="interactive-contact">
       <p class="contact-label">За сва ваша весеља:</p>
+
+      <!-- Потпис аутора -->
+      <p class="author-signature"><a href="{data.kreator}"</a>{data.kreator}</p>
       
       <!-- Интерактивни Email -->
       <a href="mailto:{data.kontakt}" class="email-link">
         <span class="email-text">{data.kontakt}</span>
       </a>
       
-      <!-- Потпис аутора -->
-      <p class="author-signature"><a href="{data.kreator}"</a>{data.kreator}</p>
+
     </div>
 
   </div>
@@ -178,7 +180,7 @@ const { data } = Astro.props;
   /* Сјајни Емаил Линк */
   .email-link {
     display: inline-block;
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
     font-weight: bold;
     font-family: var(--font-lato);
     color: white;
