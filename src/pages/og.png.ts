@@ -12,24 +12,23 @@ export async function GET() {
     const data = yaml.load(configFile) as any;
     
     // 1. Подаци
-    const imenaRaw = data.hero?.imena || data.imena || "Миљан & Анђела";
-    // Раздвајамо имена да би их ставили једно испод другог (тражи & или ' и ')
+    const imenaRaw = data.hero?.imena || data.imena || "Анђела & Миљан";
     let [ime1, ime2] = imenaRaw.split(/&| и /i).map((s: string) => s.trim());
     if (!ime2) {
-      ime1 = "Анђела";  
+      ime1 = "Анђела";
       ime2 = "Миљан";
     }
     
-    let datum = data.hero?.datum || data.osnovno?.datum || data.datum || "09. август 2026. године.";
+    let datum = data.hero?.datum || data.osnovno?.datum || data.datum || "09. Август 2026.";
     if (datum instanceof Date) {
       datum = datum.toLocaleDateString('sr-RS');
     }
     
-    const glavniDogadjaj = data.plan?.lokacije?.find((l: any) => l.naziv.includes('ручак') || l.naziv.includes('Сватовa')) || data.plan?.lokacije[2];
+    const glavniDogadjaj = data.plan?.lokacije?.find((l: any) => l.naziv.includes('ручак') || l.naziv.includes('Сватов')) || data.plan?.lokacije[2];
     const vreme = glavniDogadjaj?.vreme || "16:00";
     const lokacija = glavniDogadjaj?.opis || "Вила Рајчић, Драгобраћа";
 
-    // 2. Учитавање СВИХ потребних фонтова (и латиница и ћирилица за сваки случај)
+    // 2. Учитавање фонтова
     const [playfairCyr, playfairLat, marckCyr, marckLat] = await Promise.all([
       fetch('https://unpkg.com/@fontsource/playfair-display@5.0.8/files/playfair-display-cyrillic-400-normal.woff').then(res => res.arrayBuffer()),
       fetch('https://unpkg.com/@fontsource/playfair-display@5.0.8/files/playfair-display-latin-400-normal.woff').then(res => res.arrayBuffer()),
@@ -37,9 +36,12 @@ export async function GET() {
       fetch('https://unpkg.com/@fontsource/marck-script@5.0.8/files/marck-script-latin-400-normal.woff').then(res => res.arrayBuffer())
     ]);
 
-    // 3. Дизајн по узору на твоју слику (Vintage Папир + Елегантни орнаменти)
+    // Чувамо знак & у променљивој да га HTML парсер не би претворио у &amp;
+    const znakI = '&';
+
+    // 3. Дизајн (Обрати пажњу на font-family: 'PlayfairCyr', 'PlayfairLat' - ово осигурава да оба раде!)
     const markup = html`
-      <div style="display: flex; flex-direction: column; width: 100%; height: 100%; background-color: #f4f0e6; color: #4a453d; font-family: 'Playfair', serif; padding: 40px; box-sizing: border-box;">
+      <div style="display: flex; flex-direction: column; width: 100%; height: 100%; background-color: #f4f0e6; color: #4a453d; font-family: 'PlayfairCyr', 'PlayfairLat', serif; padding: 40px; box-sizing: border-box;">
         
         <div style="display: flex; flex-direction: column; width: 100%; height: 100%; border: 2px solid #bba585; position: relative; align-items: center; justify-content: center; padding: 40px; box-sizing: border-box;">
           
@@ -67,9 +69,9 @@ export async function GET() {
           <p style="font-size: 20px; letter-spacing: 0.15em; margin: 0; text-transform: uppercase;">Позивамо вас на наше</p>
           <p style="font-size: 30px; letter-spacing: 0.25em; margin-top: 10px; margin-bottom: 40px; text-transform: uppercase;">Венчање</p>
 
-          <h1 style="font-family: 'Marck Script'; font-size: 110px; margin: 0; font-weight: normal; line-height: 0.8;">${ime1}</h1>
-          <span style="font-family: 'Marck Script'; font-size: 80px; margin: 5px 0;">&amp;</span>
-          <h1 style="font-family: 'Marck Script'; font-size: 110px; margin: 0; font-weight: normal; line-height: 0.8;">${ime2}</h1>
+          <h1 style="font-family: 'MarckCyr', 'MarckLat', cursive; font-size: 110px; margin: 0; font-weight: normal; line-height: 0.8;">${ime1}</h1>
+          <span style="font-family: 'MarckCyr', 'MarckLat', cursive; font-size: 80px; margin: 5px 0;">${znakI}</span>
+          <h1 style="font-family: 'MarckCyr', 'MarckLat', cursive; font-size: 110px; margin: 0; font-weight: normal; line-height: 0.8;">${ime2}</h1>
 
           <div style="display: flex; align-items: center; justify-content: center; margin-top: 60px;">
             <span style="font-size: 28px; letter-spacing: 0.1em; text-transform: uppercase;">Датум</span>
@@ -93,15 +95,15 @@ export async function GET() {
       </div>
     `;
 
-    // 4. Повезивање фонтова у Satori
+    // 4. Повезивање фонтова у Satori са РАЗЛИЧИТИМ именима
     const svg = await satori(markup, {
-      width: 1200,
-      height: 630,
+      width: 900,
+      height: 1157,
       fonts: [
-        { name: 'Playfair', data: playfairLat, weight: 400, style: 'normal' },
-        { name: 'Playfair', data: playfairCyr, weight: 400, style: 'normal' },
-        { name: 'Marck Script', data: marckLat, weight: 400, style: 'normal' },
-        { name: 'Marck Script', data: marckCyr, weight: 400, style: 'normal' }
+        { name: 'PlayfairLat', data: playfairLat, weight: 400, style: 'normal' },
+        { name: 'PlayfairCyr', data: playfairCyr, weight: 400, style: 'normal' },
+        { name: 'MarckLat', data: marckLat, weight: 400, style: 'normal' },
+        { name: 'MarckCyr', data: marckCyr, weight: 400, style: 'normal' }
       ],
     });
 
