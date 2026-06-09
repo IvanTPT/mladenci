@@ -4,71 +4,111 @@ import sharp from 'sharp';
 import fs from 'node:fs/promises';
 import yaml from 'js-yaml';
 
-// Ова линија каже Astro-у да ову слику генерише само једном приликом билда
 export const prerender = true;
 
 export async function GET() {
   try {
-    // 1. Учитавање података из config.yml
     const configFile = await fs.readFile('./src/data/config.yml', 'utf8');
     const data = yaml.load(configFile) as any;
     
-    // Вучемо податке из конфигурације
-    const imena = data.hero?.imena || "Миљан & Анђела";
-    const datum = data.datum || "Ускоро";
+    // 1. Подаци
+    const imenaRaw = data.hero?.imena || data.imena || "Миљан & Анђела";
+    // Раздвајамо имена да би их ставили једно испод другог (тражи & или ' и ')
+    let [ime1, ime2] = imenaRaw.split(/&| и /i).map((s: string) => s.trim());
+    if (!ime2) {
+      ime1 = "Миљан";
+      ime2 = "Анђела";
+    }
     
-    // Налазимо главни догађај
+    let datum = data.hero?.datum || data.osnovno?.datum || data.datum || "16. Август 2026.";
+    if (datum instanceof Date) {
+      datum = datum.toLocaleDateString('sr-RS');
+    }
+    
     const glavniDogadjaj = data.plan?.lokacije?.find((l: any) => l.naziv.includes('ручак') || l.naziv.includes('Сватов')) || data.plan?.lokacije[2];
     const vreme = glavniDogadjaj?.vreme || "16:00";
     const lokacija = glavniDogadjaj?.opis || "Вила Рајчић, Драгобраћа";
 
-    // 2. Учитавамо твоју позадинску слику и претварамо је у Base64
-    const bgBuffer = await fs.readFile('./public/images/hero-bg.jpg');
-    const bgBase64 = `data:image/jpeg;base64,${bgBuffer.toString('base64')}`;
+    // 2. Учитавање СВИХ потребних фонтова (и латиница и ћирилица за сваки случај)
+    const [playfairCyr, playfairLat, marckCyr, marckLat] = await Promise.all([
+      fetch('https://unpkg.com/@fontsource/playfair-display@5.0.8/files/playfair-display-cyrillic-400-normal.woff').then(res => res.arrayBuffer()),
+      fetch('https://unpkg.com/@fontsource/playfair-display@5.0.8/files/playfair-display-latin-400-normal.woff').then(res => res.arrayBuffer()),
+      fetch('https://unpkg.com/@fontsource/marck-script@5.0.8/files/marck-script-cyrillic-400-normal.woff').then(res => res.arrayBuffer()),
+      fetch('https://unpkg.com/@fontsource/marck-script@5.0.8/files/marck-script-latin-400-normal.woff').then(res => res.arrayBuffer())
+    ]);
 
-    // 3. Учитавамо фонт директно са интернета
-    const fontBuffer = await fetch('https://unpkg.com/@fontsource/playfair-display@5.0.8/files/playfair-display-cyrillic-400-normal.woff').then(res => res.arrayBuffer());
-
-    // 4. Дизајн OG слике помоћу HTML-а
+    // 3. Дизајн по узору на твоју слику (Vintage Папир + Елегантни орнаменти)
     const markup = html`
-      <div style="display: flex; flex-direction: column; width: 100%; height: 100%; background-image: url('${bgBase64}'); background-size: cover; background-position: center; font-family: 'Playfair', serif;">
+      <div style="display: flex; flex-direction: column; width: 100%; height: 100%; background-color: #f4f0e6; color: #4a453d; font-family: 'Playfair', serif; padding: 40px; box-sizing: border-box;">
         
-        <div style="display: flex; flex-direction: column; width: 100%; height: 100%; background-color: rgba(67, 74, 66, 0.7); align-items: center; justify-content: center; color: #f4f1ea;">
+        <div style="display: flex; flex-direction: column; width: 100%; height: 100%; border: 2px solid #bba585; position: relative; align-items: center; justify-content: center; padding: 40px; box-sizing: border-box;">
           
-          <p style="font-size: 35px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 20px; color: #b58d68;">Венчање</p>
-          
-          <h1 style="font-size: 110px; margin: 0; text-shadow: 0 5px 15px rgba(0,0,0,0.5);">${imena}</h1>
-          
-          <div style="display: flex; width: 200px; height: 4px; background-color: #b58d68; margin: 40px 0;"></div>
-          
-          <p style="font-size: 50px; margin: 0; font-weight: bold;">${datum}</p>
-          
-          <p style="font-size: 35px; margin-top: 20px; color: #f4f1ea; opacity: 0.9;">${vreme} | ${lokacija}</p>
-        
+          <svg style="position: absolute; top: 15px; left: 15px;" width="60" height="60" viewBox="0 0 100 100">
+            <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
+            <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
+            <circle cx="10" cy="10" r="5" fill="#bba585" />
+          </svg>
+          <svg style="position: absolute; top: 15px; right: 15px; transform: rotate(90deg);" width="60" height="60" viewBox="0 0 100 100">
+            <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
+            <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
+            <circle cx="10" cy="10" r="5" fill="#bba585" />
+          </svg>
+          <svg style="position: absolute; bottom: 15px; left: 15px; transform: rotate(270deg);" width="60" height="60" viewBox="0 0 100 100">
+            <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
+            <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
+            <circle cx="10" cy="10" r="5" fill="#bba585" />
+          </svg>
+          <svg style="position: absolute; bottom: 15px; right: 15px; transform: rotate(180deg);" width="60" height="60" viewBox="0 0 100 100">
+            <path d="M10,90 L10,10 L90,10" fill="none" stroke="#bba585" stroke-width="3" />
+            <path d="M25,75 L25,25 L75,25" fill="none" stroke="#bba585" stroke-width="1" />
+            <circle cx="10" cy="10" r="5" fill="#bba585" />
+          </svg>
+
+          <p style="font-size: 20px; letter-spacing: 0.15em; margin: 0; text-transform: uppercase;">Позивамо вас на наше</p>
+          <p style="font-size: 30px; letter-spacing: 0.25em; margin-top: 10px; margin-bottom: 40px; text-transform: uppercase;">Венчање</p>
+
+          <h1 style="font-family: 'Marck Script'; font-size: 110px; margin: 0; font-weight: normal; line-height: 0.8;">${ime1}</h1>
+          <span style="font-family: 'Marck Script'; font-size: 80px; margin: 5px 0;">&amp;</span>
+          <h1 style="font-family: 'Marck Script'; font-size: 110px; margin: 0; font-weight: normal; line-height: 0.8;">${ime2}</h1>
+
+          <div style="display: flex; align-items: center; justify-content: center; margin-top: 60px;">
+            <span style="font-size: 28px; letter-spacing: 0.1em; text-transform: uppercase;">Датум</span>
+            
+            <div style="display: flex; width: 2px; height: 60px; background-color: #bba585; margin: 0 40px;"></div>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <span style="font-size: 38px; font-weight: bold; margin: 0; line-height: 1;">${datum.split(' ')[0]}</span>
+              <span style="font-size: 24px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 5px;">${datum.split(' ').slice(1).join(' ')}</span>
+            </div>
+
+            <div style="display: flex; width: 2px; height: 60px; background-color: #bba585; margin: 0 40px;"></div>
+            
+            <span style="font-size: 32px; letter-spacing: 0.1em;">${vreme}h</span>
+          </div>
+
+          <p style="font-size: 24px; margin-top: 50px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: bold;">Локација</p>
+          <p style="font-size: 22px; margin-top: 10px; opacity: 0.9;">${lokacija}</p>
+
         </div>
       </div>
     `;
 
-    // 5. Генерисање SVG-а преко Satori-ја
+    // 4. Повезивање фонтова у Satori
     const svg = await satori(markup, {
       width: 1200,
       height: 630,
       fonts: [
-        {
-          name: 'Playfair',
-          data: fontBuffer,
-          weight: 400,
-          style: 'normal',
-        }
+        { name: 'Playfair', data: playfairLat, weight: 400, style: 'normal' },
+        { name: 'Playfair', data: playfairCyr, weight: 400, style: 'normal' },
+        { name: 'Marck Script', data: marckLat, weight: 400, style: 'normal' },
+        { name: 'Marck Script', data: marckCyr, weight: 400, style: 'normal' }
       ],
     });
 
-    // 6. Конверзија SVG-а у PNG преко Sharp-а (ово решава грешку!)
     const pngBuffer = await sharp(Buffer.from(svg))
       .png()
       .toBuffer();
 
-    // Враћамо генерисану слику
     return new Response(pngBuffer, {
       headers: {
         'Content-Type': 'image/png',
