@@ -1,0 +1,164 @@
+---
+const { data } = Astro.props;
+---
+<section class="section">
+  <div class="section__inner w-full max-w-4xl mx-auto px-4">
+    
+    <div class="quote-box" id="animated-quote">
+      
+      <svg class="ornament top-left" viewBox="0 0 100 100">
+        <path d="M10,90 L10,10 L90,10" fill="none" stroke="currentColor" stroke-width="3" />
+        <path d="M25,75 L25,25 L75,25" fill="none" stroke="currentColor" stroke-width="1" />
+        <circle cx="10" cy="10" r="5" fill="currentColor" />
+      </svg>
+      <svg class="ornament top-right" viewBox="0 0 100 100">
+        <path d="M10,90 L10,10 L90,10" fill="none" stroke="currentColor" stroke-width="3" />
+        <path d="M25,75 L25,25 L75,25" fill="none" stroke="currentColor" stroke-width="1" />
+        <circle cx="10" cy="10" r="5" fill="currentColor" />
+      </svg>
+      <svg class="ornament bottom-left" viewBox="0 0 100 100">
+        <path d="M10,90 L10,10 L90,10" fill="none" stroke="currentColor" stroke-width="3" />
+        <path d="M25,75 L25,25 L75,25" fill="none" stroke="currentColor" stroke-width="1" />
+        <circle cx="10" cy="10" r="5" fill="currentColor" />
+      </svg>
+      <svg class="ornament bottom-right" viewBox="0 0 100 100">
+        <path d="M10,90 L10,10 L90,10" fill="none" stroke="currentColor" stroke-width="3" />
+        <path d="M25,75 L25,25 L75,25" fill="none" stroke="currentColor" stroke-width="1" />
+        <circle cx="10" cy="10" r="5" fill="currentColor" />
+      </svg>
+
+      <div class="quote-image-wrapper">
+        <img src={data.slika} alt="Наша слика" loading="lazy" />
+      </div>
+
+      <div class="quote-text-wrapper">
+        <blockquote class="quote-text">
+          "{data.tekst}"
+        </blockquote>
+        {data.autor && <cite class="quote-author">— {data.autor}</cite>}
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<script>
+  // Анимација приликом скроловања
+  document.addEventListener('DOMContentLoaded', () => {
+    const quoteBox = document.getElementById('animated-quote');
+    if (!quoteBox) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target); // Анимирај само једном
+        }
+      });
+    }, { threshold: 0.2 }); // Активира се када је 20% видљиво
+
+    observer.observe(quoteBox);
+  });
+</script>
+
+<style>
+  /* === КОНТЕЈНЕР И ОРНАМЕНТИ === */
+  .quote-box {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 2px solid var(--color-accent);
+    padding: 3rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    color: var(--color-accent); /* Боја за орнаменте */
+    
+    /* Почетно стање за анимацију (Сакривено и спуштено) */
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* Стање када постане видљиво */
+  .quote-box.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ornament {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    opacity: 0.8;
+  }
+
+  .top-left { top: 15px; left: 15px; }
+  .top-right { top: 15px; right: 15px; transform: rotate(90deg); }
+  .bottom-left { bottom: 15px; left: 15px; transform: rotate(270deg); }
+  .bottom-right { bottom: 15px; right: 15px; transform: rotate(180deg); }
+
+  /* === СЛИКА === */
+  .quote-image-wrapper {
+    width: 100%;
+    max-width: 500px; /* Ограничава ширину слике да не преплави контејнер */
+    position: relative;
+  }
+
+  .quote-image-wrapper img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    /* Додатни елегантни оквир око саме слике */
+    border: 6px solid #ffffff; 
+  }
+
+  /* === ТЕКСТ ЦИТАТА === */
+  .quote-text-wrapper {
+    text-align: center;
+    max-width: 80%;
+  }
+
+  .quote-text {
+    font-family: var(--font-playfair); /* Користимо Playfair за елеганцију */
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-style: italic;
+    color: var(--color-primary);
+    line-height: 1.5;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .quote-author {
+    font-family: var(--font-display); /* Marck Script за потпис */
+    font-size: 2rem;
+    color: var(--color-accent);
+    font-style: normal;
+    opacity: 0.9;
+  }
+
+  /* === ПРИЛАГОЂАВАЊЕ ЗА ТЕЛЕФОНЕ === */
+  @media (max-width: 600px) {
+    .quote-box {
+      padding: 2rem 1rem;
+    }
+    .quote-text-wrapper {
+      max-width: 95%;
+    }
+    .ornament {
+      width: 35px;
+      height: 35px;
+      /* Померамо орнаменте мало ближе ивицама на малим екранима */
+      top: 10px !important;
+      left: 10px !important;
+    }
+    .top-right { right: 10px !important; left: auto !important; }
+    .bottom-left { bottom: 10px !important; top: auto !important; }
+    .bottom-right { bottom: 10px !important; right: 10px !important; top: auto !important; left: auto !important; }
+  }
+</style>

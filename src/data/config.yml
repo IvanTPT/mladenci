@@ -29,6 +29,11 @@ interakcija:
   album_url: "https://photos.app.goo.gl/c2U4wgFD8ifWJXMy9"
   poruka_pre_vremena: "Албум за дељење фотографија биће доступан на дан нашег венчања. Припремите своје камере!"
 
+citat:
+  slika: "/images/citat-slika.jpg" # Убаци неку вашу лепу слику у public/images/ фолдер
+  tekst: "Две душе, два срца и једна жеља - да кроз живот идемо заједно!"
+  autor: "" # Опционо
+
 prica:
   - godina: "2021"
     naslov: "Први сусрет"

@@ -36,7 +36,7 @@ export async function GET() {
     const overlayOpacity = data.og_image?.prozirnost_papira !== undefined ? data.og_image.prozirnost_papira : 0.80;
 
     // Учитавање позадинске слике у Base64
-    const bgBuffer = await fs.readFile('./public/images/hero-bg.jpg');
+    const bgBuffer = await fs.readFile('./public/images/og_image_bg.jpg');
     const bgBase64 = `data:image/jpeg;base64,${bgBuffer.toString('base64')}`;
 
     // 3. Учитавање фонтова
