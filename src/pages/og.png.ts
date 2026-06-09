@@ -32,7 +32,7 @@ export async function GET() {
     lokacija = lokacija.replace(/^С\s*-\s*/, ''); 
 
     // 2. КОНТРОЛЕ СЛИКЕ (Читамо из config.yml)
-    const bgPosition = data.og_image?.pozicija_slike || "center 20%";
+    const bgPosition = data.og_image?.pozicija_slike || "top 30%";
     const overlayOpacity = data.og_image?.prozirnost_papira !== undefined ? data.og_image.prozirnost_papira : 0.80;
 
     // Учитавање позадинске слике у Base64
