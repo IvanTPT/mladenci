@@ -5,6 +5,7 @@ vencanje:
   datum_prikaz: "09. август 2026. године"
   muzika_url: "/audio/nasa-pesma.mp3" 
   hero_slika: "../images/hero-bg.jpg" 
+  lokacija: "Евент центар - Вила Рајчић, Драгобраћа" 
 
 plan:
   lokacije:
@@ -22,6 +23,7 @@ plan:
       opis: "C - Евент центар - Вила Рајчић, Драгобраћа" 
     - vreme: "17:30"
       naziv: "Журка"
+      opis: "C - Евент центар - Вила Рајчић, Драгобраћа" 
   mapa_embed: "https://www.google.com/maps/d/u/0/embed?mid=1h6AdwcFwHy594_QKviVzqNjw2uy4YhE&ehbc=2E312F"
 
 interakcija:
