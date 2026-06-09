@@ -20,7 +20,6 @@
     "tailwindcss": "^4.1.18",
     "yaml": "^2.8.2",
     "satori": "^0.10.11",
-    "satori-html": "^0.3.2",
-    "@resvg/resvg-js": "^2.6.0"
+    "satori-html": "^0.3.2"
   }
 }
