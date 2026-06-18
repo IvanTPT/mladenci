@@ -99,12 +99,12 @@ export async function GET() {
               
               <span style="font-size: 38px; letter-spacing: 0.1em;">${vreme}h</span>
 
-              <p style="font-size: 26px; margin-top: 15px; opacity: 0.9;">${poruka_potvrde}</p>
             </div>
+
 
             <p style="font-size: 28px; margin-top: 70px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: bold;">Локација</p>
             <p style="font-size: 26px; margin-top: 15px; opacity: 0.9;">${lokacija}</p>
-
+            <p style="font-size: 20px; margin-top: 50px; opacity: 0.9;">${poruka_potvrde}</p>
           </div>
         </div>
       </div>
