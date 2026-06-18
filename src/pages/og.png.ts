@@ -31,6 +31,8 @@ export async function GET() {
     let lokacija = glavniDogadjaj?.opis || "Вила Рајчић, Драгобраћа";
     lokacija = lokacija.replace(/^С\s*-\s*/, ''); 
 
+    let poruka_potvrde = data.interakcija?.poruka_potvrde || "Молимо Вас да потврдите долазак попуњавањем форме на позивници онлајн.";
+
     // 2. КОНТРОЛЕ СЛИКЕ (Читамо из config.yml)
     const bgPosition = data.og_image?.pozicija_slike || "center center";
     const overlayOpacity = data.og_image?.prozirnost_papira !== undefined ? data.og_image.prozirnost_papira : 0.80;
@@ -96,6 +98,8 @@ export async function GET() {
               <div style="display: flex; width: 2px; height: 70px; background-color: #bba585; margin: 0 40px;"></div>
               
               <span style="font-size: 38px; letter-spacing: 0.1em;">${vreme}h</span>
+
+              <p style="font-size: 26px; margin-top: 15px; opacity: 0.9;">${poruka_potvrde}</p>
             </div>
 
             <p style="font-size: 28px; margin-top: 70px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: bold;">Локација</p>

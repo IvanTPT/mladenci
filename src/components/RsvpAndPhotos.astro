@@ -12,6 +12,8 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
       <!-- ЛЕВА СТРАНА: RSVP -->
       <div class="card rsvp-card">
         <h2 id="form-title">Потврда доласка</h2>
+        <div id="rsvp-message-container">
+          <p class="rsvp-desc">{data.poruka_potvrde}</p>
         
         <form id="rsvp-form" class="rsvp-form">
           <fieldset>
@@ -193,6 +195,13 @@ const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data
     flex: 1; /* Tera formu da popuni prazan prostor do dugmeta */
     display: flex;
     flex-direction: column;
+  }
+
+  .rsvp-desc {
+    color: var(--color-text-dark);
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
   }
 
   fieldset { border: none; padding: 0; margin: 0 0 1.5rem 0; }
